@@ -59,7 +59,7 @@
 
     <!-- for Snapchatlib -->
     <ItemGroup>
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.3" />
         <PackageReference Include="textverified_api" Version="1.0.3" />
     </ItemGroup>
 
