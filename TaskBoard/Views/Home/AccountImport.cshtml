@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using TaskBoard.ViewComponents
+@inject AppSettingsLoader SettingsLoader
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Import Accounts";
+    var settings = await SettingsLoader.Load();
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+
+<p>Upload accounts that you currently own on this page. You currently have a maximum of <strong>@settings.MaxManagedAccounts</strong> available account slots to use. At which point you will not be able to add further accounts.</p>
+<form>
+    <div class="row">
+        <div class="col">
+            <div class="row mb-2">
+                <label for="uploadFile" class="form-label">Accounts file</label>
+                <input type="file" id="accountsUploadFile" name="accountsUploadFile" class="form-control" accept="text/plain"/>
+                <div class="form-text text-white-50 mb-2">Input file with the following format: USERID*USERNAME*PASSWORD*AUTHTOKEN*EMAIL*DEVICE*INSTALL*DTOKEN1I*DTOKEN1V*INSTALLTIME*OS*SNAPCHATVERSION*PROXYADDRESS*PROXYUSER*PROXYPASS*DEVICEPROFILE*ACCESS_TOKEN*COF_TOKEN*ACCESS_TOKEN*BUSINESS_ACCESS_TOKEN*TIMEZONE*HOROSCOPE*ACCOUNT_COUNTRY_CODE*CLIENT_ID*AGE*REFRESH_TOKEN</div>
+            </div>
+            <div class="row mb-2">
+                <label for="uploadGroup" class="form-label">Type a group name, or select from an existing group</label>
+                <input type="text" id="uploadGroup" class="form-control" placeholder="Group name" value=""/>
+                @await Component.InvokeAsync(nameof(AccountGroupSelect), new AccountGroupSelectViewArguments() { ControlId = "uploadGroupId", ShowLabel = false })
+            </div>
+            <div class="row">
+                <button type="button" id="btn_uploadAccounts" class="btn btn-outline-light text-bg-dark ml-2">Upload</button>
+            </div>
+        </div>
+    </div>
+</form>
+<hr class="mb-2" />
+<partial name="_AccountsTableWithFilters"/>
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section HeadScripts
+{
+    <!-- Required for SnapchatAccountDatatable view componment -->
+    <script src="~/js/classes/validationstatus.js?1504"></script>
+    <script src="~/js/accountDatatable.js?1504"></script>
+}
+
+@section Scripts {
+    <script src="/js/classes/accountmanager.js?1504"></script>
+    <script src="/js/accounttools.js?1504"></script>
+}

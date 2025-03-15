@@ -1,0 +1,412 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SnapWebModels
+@inject SignInManager<IdentityUser> SignInManager
+@inject ModuleEnabler ModuleEnabler
+@{ ViewData["templateMode"] = "dark"; }
+
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-layout-mode="@ViewData["templateMode"]" data-body-image="img-1" data-preloader="enable">
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - SnapWeb</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico">
+
+    <!-- jsvectormap css -->
+    <link href="~/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+
+    <!--Swiper slider css-->
+    <link href="~/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Layout config Js -->
+    <script src="~/assets/js/layout.js?1504"></script>
+    <!-- Bootstrap Css -->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="~/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+	
+    <!-- custom Css-->
+    <link href="~/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/css/vendor.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="~/datetimepicker/jquery.datetimepicker.min.css"/>
+    <link href="~/css/site.css" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/95d1a53319.js?1504" crossorigin="anonymous"></script>
+	
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js?1504" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?1504" async defer></script>
+    
+    <script src="~/assets/plugins/apexcharts/dist/apexcharts.min.js?1504"></script>
+    <script src="~/js/charts/chartFactory.js?1504"></script>
+    <script src="~/assets/plugins/datatables.net/js/jquery.dataTables.js?1504"></script>
+    <script src="~/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1504"></script>
+    
+    @await RenderSectionAsync("HeadScripts", false)
+
+    @await RenderSectionAsync("Stylesheets", false)
+</head>
+
+<body>
+<!-- Begin page -->
+	<div id="layout-wrapper">
+		<header id="page-topbar">
+			<div class="layout-width">
+				<div class="navbar-header">
+					<div class="d-flex">
+						<!-- LOGO -->
+						<div class="navbar-brand-box horizontal-logo">
+							<a href="index.html" class="logo logo-dark">
+								<span class="logo-sm">
+									<img src="assets/images/logo-sm.png" alt="" height="22">
+								</span>
+								<span class="logo-lg">
+									<img src="assets/images/logo-dark.png" alt="" height="17">
+								</span>
+							</a>
+
+							<a href="index.html" class="logo logo-light">
+								<span class="logo-sm">
+									<img src="assets/images/logo-sm.png" alt="" height="22">
+								</span>
+								<span class="logo-lg">
+									<img src="assets/images/logo-light.png" alt="" height="17">
+								</span>
+							</a>
+						</div>
+
+						<button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" id="topnav-hamburger-icon">
+							<span class="hamburger-icon">
+								<span></span>
+								<span></span>
+								<span></span>
+							</span>
+						</button>
+					</div>
+					<div class="d-flex align-items-center">
+						<div class="ms-1 header-item d-none d-sm-flex">
+							<button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
+								<i class="bx bx-fullscreen fs-22"></i>
+							</button>
+						</div>
+						<partial name="_LoginPartial"/>
+					</div>
+				</div>
+			</div>
+		</header>
+	</div>
+
+	<!-- ========== App Menu ========== -->
+	<div class="app-menu navbar-menu border-end">
+	<!-- LOGO -->
+	<div class="navbar-brand-box">
+		<button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+			<i class="ri-record-circle-line"></i>
+		</button>
+	</div>
+
+	<div id="scrollbar" data-simplebar="init" class="h-100">
+		<div class="simplebar-wrapper" style="margin: 0px;">
+			<div class="simplebar-height-auto-observer-wrapper">
+				<div class="simplebar-height-auto-observer"></div>
+			</div>
+			<div class="simplebar-mask">
+				<div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+					<div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;">
+						<div class="simplebar-content" style="padding: 0px;">
+							<div class="container-fluid">
+								<div id="two-column-menu">
+								</div>
+								<ul class="navbar-nav" id="navbar-nav" data-simplebar="init">
+									<div class="simplebar-wrapper" style="margin: 0px;">
+										<div class="simplebar-height-auto-observer-wrapper">
+											<div class="simplebar-height-auto-observer"></div>
+										</div>
+										@if (SignInManager.IsSignedIn(User))
+										{
+											<div class="simplebar-mask">
+												<div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+													<div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden;">
+														<div class="simplebar-content" style="padding: 0px;">
+															<li class="menu-title"><span data-key="t-menu">Menu</span></li>
+															<li class="nav-item">
+																<a class="nav-link menu-link collapsed active" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebarDashboards">
+																	<i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
+																</a>
+
+																<div class="collapse menu-dropdown show" id="sidebarDashboards">
+																	<ul class="nav nav-sm flex-column">
+																		<li class="nav-item">
+																			<a asp-area="" asp-controller="Home" asp-action="Overview" class="nav-link" data-key="t-accountOverview">Account Overview</a>
+																		</li>
+																		<li class="nav-item">
+																			<a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link" data-key="t-work-list">Work List</a>
+																		</li>
+																		@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.Analytics))
+																		{
+																			<li class="nav-item">
+																				<a asp-area="" asp-controller="Home" asp-action="Analytics" class="nav-link" data-key="t-analytics">Analytics</a>
+																			</li>
+																		}
+																	</ul>
+																</div>
+															</li> <!-- end Dashboard Menu -->
+															<li class="nav-item">
+																<a class="nav-link menu-link collapsed" href="#sidebarAccounts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAccounts">
+																	<i class="ri-account-circle-line"></i> <span data-key="t-accounts">Accounts</span>
+																</a>
+																<div class="collapse menu-dropdown" id="sidebarAccounts">
+																	<ul class="nav nav-sm flex-column">
+																		<li class="nav-item">
+																			<a asp-area="" asp-controller="Home" asp-action="AccountImport" class="nav-link" data-key="t-account-import">Import Accounts</a>
+																		</li>
+																		<li class="nav-item">
+																			<a asp-area="" asp-controller="Home" asp-action="AccountTools" class="nav-link" data-key="t-account-manager">Account Manager</a>
+																		</li>
+																		@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.BitmojiCreator))
+																		{
+																			<li class="nav-item">
+																				<a asp-area="" asp-controller="Home" asp-action="BitmojiCreator" class="nav-link" data-key="t-groups">Bitmoji Creator</a>
+																			</li>
+																		}
+																		<li class="nav-item">
+																			<a asp-area="" asp-controller="AccountGroup" asp-action="Index" class="nav-link" data-key="t-groups">Groups</a>
+																		</li>
+																		@if (await ModuleEnabler.ShowRelationshipActions())
+																		{
+																			<li class="nav-item">
+																				<a asp-area="" asp-controller="Home" asp-action="Relationships" class="nav-link" data-key="t-relationships">Relationships</a>
+																			</li>
+																		}
+																	</ul>
+																</div>
+															</li>
+															<li class="nav-item">
+																<a class="nav-link menu-link collapsed" href="#sidebarProxies" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProxies">
+																	<i class="ri-router-line"></i> <span data-key="t-proxies">Proxies</span>
+																</a>
+																<div class="collapse menu-dropdown" id="sidebarProxies">
+																	<ul class="nav nav-sm flex-column">
+																		<li class="nav-item">
+																			<a asp-area="" asp-controller="Home" asp-action="ProxyManager" class="nav-link" data-key="t-proxy-manager">Proxy Manager</a>
+																		</li>
+																		<li class="nav-item">
+																			<a asp-area="" asp-controller="ProxyGroup" asp-action="Index" class="nav-link" data-key="t-proxy-groups">Groups</a>
+																		</li>
+																	</ul>
+																</div>
+															</li>
+															<li class="nav-item">
+																<a class="nav-link menu-link" asp-area="" asp-controller="Home" asp-action="EmailManager" aria-expanded="false">
+																	<i class="ri-mail-line"></i> <span data-key="t-email-manager">E-Mail Manager</span>
+																</a>
+															</li>
+															<li class="nav-item">
+																<a class="nav-link menu-link" asp-area="" asp-controller="Home" asp-action="TargetManager" aria-expanded="false">
+																	<i class="ri-creative-commons-by-line"></i> <span data-key="t-target-manager">Target Manager</span>
+																</a>
+															</li>
+															<li class="nav-item">
+																<a class="nav-link menu-link" asp-area="" asp-controller="MediaManager" asp-action="Index" aria-expanded="false">
+																	<i class="ri-slideshow-4-line"></i> <span data-key="t-media-manager">Media Manager</span>
+																</a>
+															</li>
+															<li class="nav-item">
+																<a class="nav-link menu-link" asp-area="" asp-controller="Home" asp-action="NameManager" aria-expanded="false">
+																	<i class="ri-file-user-line"></i> <span data-key="t-name-manager">Name Manager</span>
+																</a>
+															</li>
+															<li class="nav-item">
+																<a class="nav-link menu-link" asp-area="" asp-controller="Home" asp-action="UserNameManager" aria-expanded="false">
+																	<i class="ri-price-tag-3-line"></i> <span data-key="t-username-manager">Username Manager</span>
+																</a>
+															</li>
+															@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.MacroManager))
+															{
+																<li class="nav-item">
+																	<a class="nav-link menu-link" asp-area="" asp-controller="Home" asp-action="MacroManager" aria-expanded="false">
+																		<i class="ri-code-s-slash-line "></i> <span data-key="t-macro-manager">Macro Manager</span>
+																	</a>
+																</li>
+															}
+															<li class="nav-item">
+																<a class="nav-link menu-link collapsed" href="#sidebarScrapers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarScrapers">
+																	<i class="ri-search-eye-line"></i> <span data-key="t-scrapers">Scrapers</span>
+																</a>
+																<div class="collapse menu-dropdown" id="sidebarScrapers">
+																	<ul class="nav nav-sm flex-column">
+																		@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.FindUsersViaSearch))
+																		{
+																			<li class="nav-item">
+																				<a asp-area="" asp-controller="Home" asp-action="KeywordScraper" class="nav-link" data-key="t-keywordscraper">Keyword</a>
+																			</li>
+																		}
+																		@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.EmailScraper))
+																		{
+																			<li class="nav-item">
+																				<a asp-area="" asp-controller="Home" asp-action="EmailScraper" class="nav-link" data-key="t-emailscraper">E-Mail</a>
+																			</li>
+																		}
+																		@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.PhoneScraper))
+																		{
+																			<li class="nav-item">
+																				<a asp-area="" asp-controller="Home" asp-action="PhoneScraper" class="nav-link" data-key="t-phonescraper">Phone</a>
+																			</li>
+																		}
+																	</ul>
+																</div>
+															</li>
+															<li class="nav-item">
+																<a class="nav-link menu-link" asp-area="" asp-controller="Home" asp-action="MessagePoster" aria-expanded="false">
+																	<i class="ri-send-plane-line"></i> <span data-key="t-message-poster">Message Poster</span>
+																</a>
+															</li>
+															@if (await ModuleEnabler.ShowPrivateActions())
+															{
+																<li class="nav-item">
+																	<a class="nav-link menu-link" asp-area="" asp-controller="Home" asp-action="OtherActions" aria-expanded="false">
+																		<i class="ri-apps-line"></i> <span data-key="t-other">Other Actions</span>
+																	</a>
+																</li>
+															}
+														</div>
+													</div>
+												</div>
+											</div>
+										}
+										<div class="simplebar-placeholder" style="width: auto; height: 1086px;"></div>
+									</div>
+									<div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+										<div class="simplebar-scrollbar" style="width: 0px; display: none; transform: translate3d(0px, 0px, 0px);"></div>
+									</div>
+									<div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+										<div class="simplebar-scrollbar" style="height: 0px; display: none;"></div>
+									</div>
+								</ul>
+							</div>
+							<!-- Sidebar -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="simplebar-placeholder" style="width: auto; height: 1086px;"></div>
+		</div>
+		<div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+			<div class="simplebar-scrollbar" style="width: 0px; display: none; transform: translate3d(0px, 0px, 0px);"></div>
+		</div>
+		<div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+			<div class="simplebar-scrollbar" style="height: 89px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+		</div>
+	</div>
+	</div>
+
+	<!-- ============================================================== -->
+	<!-- Start right Content here -->
+	<!-- ============================================================== -->
+	<div class="main-content">
+		<div id="alertContainer" class="d-flex-inline flex-column"></div>
+		<div class="page-content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col">
+						<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+							<h3 class="mb-sm-0">@ViewData["Title"]</h3>
+						</div>
+					</div>
+				</div>
+				@RenderBody()
+			</div>
+			<!-- container-fluid -->
+		</div>
+		<!-- End Page-content -->
+
+		<footer class="footer border-top">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-6">
+						SnapWeb V1.2 <script>document.write(new Date().getFullYear())</script> © JSnap LLC.
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<!-- end main content-->
+	<div id="siteModal" class="modal modal-cover fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"></h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modalExit"></button>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-outline-danger" data-bs-dismiss="modal" id="btn_modalClose">Close</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalPurgeAccConfirm">Confirm</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalConfirm">Confirm</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalAddedConfirm">Confirm</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalFilteredConfirm">Confirm</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalConfirm_refreshAll">Confirm</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalConfirm_acceptAll">Confirm</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalConfirm_relogAll">Confirm</button>
+					<button type="button" style="display: none;" class="btn btn-outline-danger" id="btn_modalConfirm_cleanAll">Confirm</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END layout-wrapper -->
+
+
+
+	<!--start back-to-top-->
+	<button onclick="topFunction()" class="btn btn-primary btn-icon" id="back-to-top">
+		<i class="ri-arrow-up-line"></i>
+	</button>
+	<!--end back-to-top-->
+
+	<!--preloader-->
+	<div id="preloader">
+		<div id="status">
+			<div class="spinner-border text-primary avatar-sm" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- JAVASCRIPT -->
+	<script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js?1504"></script>
+	<script src="~/assets/libs/simplebar/simplebar.min.js?1504"></script>
+	<script src="~/assets/libs/node-waves/waves.min.js?1504"></script>
+	<script src="~/assets/libs/feather-icons/feather.min.js?1504"></script>
+	<script src="~/assets/js/pages/plugins/lord-icon-2.1.0.js?1504"></script>
+	<script src="~/assets/js/plugins.js?1504"></script>
+
+	<!-- apexcharts -->
+	<script src="~/assets/libs/apexcharts/apexcharts.min.js?1504"></script>
+
+	<!-- Vector map-->
+	<script src="~/assets/libs/jsvectormap/js/jsvectormap.min.js?1504"></script>
+	<script src="~/assets/libs/jsvectormap/maps/world-merc.js?1504"></script>
+
+	<!--Swiper slider js-->
+	<script src="~/assets/libs/swiper/swiper-bundle.min.js?1504"></script>
+
+	<!-- Dashboard init -->
+	<script src="~/assets/js/pages/dashboard-ecommerce.init.js?1504"></script>
+
+	<!-- App js -->
+	<script src="~/assets/js/app.js?1504"></script>
+	<script src="~/datetimepicker/jquery.datetimepicker.full.js?1504"></script>
+	<script src="/js/common.js?1504"></script>
+	<script src="/js/classes/alert.js?1504"></script>
+	<script src="/js/classes/logger.js?1504"></script>
+	<script src="/js/classes/api.js?1504"></script>
+	@await RenderSectionAsync("Scripts", false)
+</body>
+</html>

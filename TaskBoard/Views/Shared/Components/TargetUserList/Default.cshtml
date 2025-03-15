@@ -1,0 +1,12 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model TargetUserListViewModel
+
+@{
+    var items = Model.Users.Select(t => new SelectListItem(t.Username, t.Username)).ToList();
+}
+
+<div class="mb-2">
+    <label for="@Model.ElementId" class="form-label">@Model.Label</label>
+    <input type="url" id="@Model.ElementId" name="@Model.ElementId" class="form-control"/>
+    <div class="form-text">For multiple users, separate strings with comma: ,</div>
+</div>

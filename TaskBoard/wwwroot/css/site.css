@@ -1,0 +1,85 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.editable {
+    position: relative;
+    padding: 10px;
+    border: 1px solid darkslategrey;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.cancel-button {
+    top: 5003334324234324324234px;
+}
+
+.account-list {
+    overflow-x: scroll;
+}
+
+.messages {
+    font-family: "Consolas";
+}
+
+#proxyList {
+    overflow-x: scroll;
+}
+
+.progress-element {
+    height: 1em;
+    line-height: 1em;
+    font-size: 1em;
+    justify-content: center;
+}
+
+#alertContainer {
+    margin: 0;
+    position: fixed;
+    top: 10%;
+    left: 85%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+
+.work-cancel {
+    height: 1em;
+    line-height: 1em;
+    font-size: 1em;
+    display: flex;
+    padding-left: 5px;
+}
+
+.action-card > .card-body {
+    flex: auto !important;
+    overflow: auto !important;
+}
+
+input.cartItemQuantity {
+    -moz-appearance: textfield;
+}
+
+input.cartItemQuantity::-webkit-outer-spin-button,
+input.cartItemQuantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.disabled-item-row div,
+.disabled-item-row span {
+    color: gray !important;
+    border-color: gray !important;
+}

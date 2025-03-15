@@ -1,0 +1,17 @@
+﻿@using TaskBoard.ViewComponents
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Home Page";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+
+<partial name="_WorkListPartial"/>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+    <script src="/js/classes/workaction.js?1504"></script>
+    <script src="/js/classes/workstatus.js?1504"></script>
+    <script src="/js/classes/workmanager.js?1504"></script>
+    <script src="/js/home.js?1504"></script>
+}

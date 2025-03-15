@@ -1,0 +1,53 @@
+﻿@{ ViewData["templateMode"] = "dark"; }
+
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-layout-mode="@ViewData["templateMode"]" data-body-image="img-1" data-preloader="enable">
+
+<head>
+<meta charset="utf-8" />
+    <title>@ViewData["Title"] - SnapWeb</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico">
+
+    <!-- jsvectormap css -->
+    <link href="~/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+
+    <!--Swiper slider css-->
+    <link href="~/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Layout config Js -->
+    <script src="~/assets/js/layout.js?1504"></script>
+    <!-- Bootstrap Css -->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="~/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+	
+    <!-- custom Css-->
+    <link href="~/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/css/vendor.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="~/datetimepicker/jquery.datetimepicker.min.css"/>
+    <link href="~/css/site.css" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/95d1a53319.js?1504" crossorigin="anonymous"></script>
+	
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js?1504" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?1504" async defer></script>
+    
+    <script src="~/assets/plugins/apexcharts/dist/apexcharts.min.js?1504"></script>
+    <script src="~/js/charts/chartFactory.js?1504"></script>
+    <script src="~/assets/plugins/datatables.net/js/jquery.dataTables.js?1504"></script>
+    <script src="~/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1504"></script>
+    
+    @await RenderSectionAsync("HeadScripts", false)
+
+    @await RenderSectionAsync("Stylesheets", false)
+</head>
+
+<body>
+@RenderBody()
+</body>
+</html>

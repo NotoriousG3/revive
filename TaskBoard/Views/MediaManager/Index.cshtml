@@ -1,0 +1,49 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@model MediaManagerViewModel
+@{
+    ViewData["Title"] = "Media Manager";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+
+<p>You have used <strong>@Utilities.BytesToString(Model.CurrentUsageBytes)</strong> out of your allowed <strong>@Utilities.BytesToString(Model.MaxQuotaMb * Utilities.BytesToMbConversionLiteral)</strong> of storage.</p>
+<form>
+    <div class="row mb-2">
+        <div class="col col-sm-6 mb-2">
+            <h4>Upload File</h4>
+            <div class="mb-2">
+                <form action="api/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+                    <label for="inputfile" class="form-label">Input file</label>
+                    <input type="file" id="inputfile" name="inputFile" class="form-control" accept="image/jpeg, image/png, video/mp4, video/quicktime"/>
+                </form>
+            </div>
+            <button type="button" class="btn btn-outline-light text-bg-dark" id="btn_upload">
+                Upload
+            </button>
+        </div>
+    </div>
+</form>
+<hr class="mb-2"/>
+<div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-outline-danger text-bg-dark" onclick="ShowPurgeModal();"><i class="fa fa-circle-radiation"></i> Purge Media</button>
+</div>
+<hr class="mb-2"/>
+<table class="table table-dark" id="fileTable" style="width: 100%;">
+    <thead>
+    <th></th>
+    <th>Id</th>
+    <th>FileName</th>
+    <th>Size</th>
+    <th>Running Jobs</th>
+    <th>Scheduled Jobs</th>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+    <script src="/assets/plugins/datatables.net/js/jquery.dataTables.js?1502"></script>
+    <script src="/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1502"></script>
+    <script src="/js/mediamanager.js?1502"></script>
+}

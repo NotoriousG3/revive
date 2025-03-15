@@ -1,0 +1,51 @@
+﻿@using SnapWebModels
+@using TaskBoard.ViewComponents
+@inject ModuleEnabler ModuleEnabler
+@{
+    var SendMessage = await ModuleEnabler.IsEnabled(SnapWebModuleId.SendMessage);
+    var PostDirect = await ModuleEnabler.IsEnabled(SnapWebModuleId.PostDirect);
+    var PostStory = await ModuleEnabler.IsEnabled(SnapWebModuleId.PostStory);
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Message Poster";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<div class="row mb-3">
+    <partial name="_CommonActionControlsPartial"/>
+</div>
+<hr/>
+<div class="row mb-2">
+    @if (PostDirect)
+    {
+        <div class="col-sm-6 col-xxl-4 mb-2">
+            <partial name="_PostDirectPartial"/>
+        </div>
+    }
+    @if (SendMessage)
+    {
+        <div class="col-sm-6 col-xxl-4 mb-2">
+            <partial name="_SendMessagePartial"/>
+        </div>
+        <div class="col-sm-6 col-xxl-4 mb-2">
+            <partial name="_SendMentionPartial"/>
+        </div>
+    }
+    @if (PostStory)
+    {
+        <div class="col-sm-6 col-xxl-4 mb-2">
+            <partial name="_PostStoryPartial"/>
+        </div>
+    }
+</div>
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Stylesheets
+{
+    <link rel="stylesheet" href="~/datetimepicker/jquery.datetimepicker.min.css"/>
+}
+
+@section Scripts {
+    <script src="~/datetimepicker/jquery.datetimepicker.full.js?1504"></script>
+    <script src="/js/messageposter.js?1504"></script>
+}

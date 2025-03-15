@@ -1,0 +1,55 @@
+@model SnapWebModels.SnapWebClientModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SnapWebClientModel</h4>
+    <hr/>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApiKey)
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaxManagedAccounts)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxManagedAccounts)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Threads)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Threads)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaxTasks)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxTasks)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxQuotaMb)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaxAddFriendsUsers)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxAddFriendsUsers)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AccessDeadline)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AccessDeadline)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ClientId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Settings";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<form class="form px-3 py-2">
+    <div class="row pb-2 mb-2 border-bottom">
+        <div class="col-xxl-3 col-sm">
+            <div class="mb-2">
+                <label for="timeout" class="form-label">Client Timeout (s)</label>
+                <input type="number" id="timeout" class="form-control" min="5" value="5" aria-describedby="timeoutHelp"/>
+                <div id="timeoutHelp" class="form-text">SnapchatClient timeout in seconds</div>
+            </div>
+            <div class="mb-2">
+                <label for="maxRetries" class="form-label">Max Retries</label>
+                <input type="number" id="maxRetries" class="form-control" checked/>
+                <div id="maxRetriesHelp" class="form-text">How many retries we should attempt before failing an action.</div>
+            </div>
+            <div class="mb-2">
+                <input type="checkbox" id="enableBandwidthSaver" class="form-check-input" checked/>
+                <label id="enableBandwidthSaver" class="form-check-label">Enable Bandwidth Saver</label>
+                <div id="enableBandwidthSaverHelp" class="form-text">Enable BandwidthSaver flag for SnapchatClient</div>
+            </div>
+            <div class="mb-2">
+                <input type="checkbox" id="enableWebRegister" class="form-check-input" checked/>
+                <label id="enableWebRegister" class="form-check-label">Enable Web Register</label>
+                <div id="enableWebRegisterHelp" class="form-text">Enable Web Register flag for Snapchat (CONSUMES MORE BANDWIDTH / REQUIRES KOPEECHKA API KEY)</div>
+            </div>
+            <div class="mb-2">
+                <input type="checkbox" id="enableStealth" class="form-check-input" checked/>
+                <label id="enableStealth" class="form-check-label">Enable Stealth Posting</label>
+                <div id="enableStealthHelp" class="form-text">Enable Stealth Posting</div>
+            </div>
+            @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.ProxyScraper))
+            {
+                <div class="mb-2">
+                    <input type="checkbox" id="proxyScraping" class="form-check-input" checked/>
+                    <label id="proxyScraping" class="form-check-label">Enable Proxy Scraper</label>
+                    <div id="proxyScrapingHelp" class="form-text">Enable Proxy Scraping service</div>
+                </div>
+            }
+            <div class="mb-2">
+                <label for="fiveSimApiKey" class="form-label">Five SIM Api Key</label>
+                <input type="text" id="fiveSimApiKey" class="form-control" checked/>
+            </div>
+            <div class="mb-2">
+                <label for="textverifiedApiKey" class="form-label">TextVerified Api Key</label>
+                <input type="text" id="textverifiedApiKey" class="form-control" checked/>
+            </div>
+            <div class="mb-2">
+                <label for="smsactivateApiKey" class="form-label">SMS-Activate Api Key</label>
+                <input type="text" id="smsactivateApiKey" class="form-control" checked/>
+            </div>
+            <div class="mb-2">
+                <label for="namsorApiKey" class="form-label">Namsor Api Key</label>
+                <input type="text" id="namsorApiKey" class="form-control" checked/>
+            </div>
+            <div class="mb-2">
+                <label for="smsPoolApiKey" class="form-label">SMS Pool Api Key</label>
+                <input type="text" id="smsPoolApiKey" class="form-control" checked/>
+            </div>
+            <div class="mb-2">
+                <label for="kopeechkaApiKey" class="form-label">Kopeechka Api Key</label>
+                <input type="text" id="kopeechkaApiKey" class="form-control" checked/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button type="button" id="btn_saveSettings" class="btn btn-outline-light text-bg-dark">Save</button>
+    </div>
+</form>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts
+{
+    <script src="/js/settings.js?1504"></script>
+}

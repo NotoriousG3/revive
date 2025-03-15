@@ -1,0 +1,30 @@
+﻿@using TaskBoard.ViewComponents
+@using SnapWebModels
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject ModuleEnabler ModuleEnabler
+@{
+    ViewData["Title"] = "Analytics Dashboard";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.Analytics))
+{
+    <div class="d-flex justify-content-evenly align-bottom">
+        <div class="lockedBarChart">
+            @await Component.InvokeAsync(nameof(LockedAccountsGraph))
+        </div>
+        <div class="messagesChartContainer">
+            @await Component.InvokeAsync(nameof(MessagesGraph))
+        </div><br />
+        <div class="topCountriesChartContainer">
+            @await Component.InvokeAsync(nameof(TopCountriesScrapedGraph))
+        </div>
+        <div class="topRacesChartContainer">
+            @await Component.InvokeAsync(nameof(TopRacesScrapedGraph))
+        </div><br />
+        <div class="friendCountGraph">
+            @await Component.InvokeAsync(nameof(FriendsGraph))
+        </div>
+    </div>
+}
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />

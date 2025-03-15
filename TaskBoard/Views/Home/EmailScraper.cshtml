@@ -1,0 +1,77 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.EmailScraper);
+}
+@{
+    ViewData["Title"] = "Email Scraper";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+@if (isEnabled)
+{
+<form>
+    <div class="row mb-2">
+        <div class="col col-sm-6 mb-2">
+            <h4>Email Scraper</h4>
+            <partial name="_CommonActionControlsPartial"/>
+            <div class="mb-2">
+                <label for="emails" class="form-label">Amount of E-Mails per Account</label>
+                <input type="number" id="emails" class="form-control" value="20"/>
+            </div>
+            <div class="form-control text-bg-dark mb-2">
+	            <label for="randomizerScrape">Scrape Type</label>
+                <select class="form-control" id="randomizerScrape" name="randomizerScrape">
+                    <option value="0" selected>Email Database</option>
+                    <option value="random">Random</option>
+                </select>
+                <label for="OnlyActive"></label>
+                <input type="checkbox" id="OnlyActive" name="OnlyActive" value="randomize" /> 
+                Only scrape active accounts.<br />
+            </div>
+            <button type="button" class="btn btn-outline-light text-bg-dark" id="btn_scrapeEmails">
+                Start Scraping
+            </button>
+        </div>
+        <div class="col col-sm-6 mb-2">
+            <h4>New Email</h4>
+            <div class="mb-2">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" class="form-control"/>
+            </div>
+            <button type="button" class="btn btn-outline-light text-bg-dark" id="btn_addEmail">
+                Save
+            </button>
+        </div>
+        <div class="col col-sm-6 mb-2">
+            <label for="emailsUploadFile" class="form-label">Upload emails from file</label>
+            <input type="file" id="emailsUploadFile" name="emailsUploadFile" class="form-control" accept="text/plain" />
+            <div class="form-text text-white-50 mb-2">Input file with the following format: email@address.com</div>
+            <button type="button" id="btn_uploadEmails" class="btn btn-outline-light text-bg-dark">Upload</button>
+        </div>
+    </div>
+</form>
+<hr class="mb-2"/>
+<div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-outline-danger text-bg-dark" onclick="ShowPurgeModal();"><i class="fa fa-circle-radiation"></i> Purge Emails</button>
+    <a href=@Url.Action("Export", "EmailScrape") class="btn btn-outline-yellow text-bg-dark ms-2"><i class="fa fa-save"></i> Export to disk</a>
+</div>
+<hr class="mb-2"/>
+<table class="table table-dark" id="emailsTable" style="width: 100%;">
+    <thead>
+    <th></th>
+    <th>Id</th>
+    <th>Email</th>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+    <script src="/assets/plugins/datatables.net/js/jquery.dataTables.js?1504"></script>
+    <script src="/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1504"></script>
+    <script src="/js/emailscrapermanager.js?1504"></script>
+}
+}

@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model TaskBoard.ViewComponents.TargetExportFilterSelectViewModel
+@{
+    var items = new List<SelectListItem>() { new("", "0") };
+    items.AddRange(Model.FilterTarget.Select(g => new SelectListItem(g, g.ToString())));
+}
+
+@if (Model.ShowLabel)
+{
+    <label for="@Model.ControlId" class="form-label">Existing Group</label>
+}
+<select id="@Model.ControlId" asp-items="items" class="form-control text-bg-dark">
+</select>

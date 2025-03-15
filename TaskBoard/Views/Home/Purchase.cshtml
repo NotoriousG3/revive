@@ -1,0 +1,143 @@
+﻿@using Newtonsoft.Json
+@using NuGet.Protocol
+@using SnapWebModels
+@inject SnapWebManagerClient ManagerClient
+@inject AppSettingsLoader SettingsLoader
+@{
+    ViewBag.Title = "SnapWeb Add-Ons";
+    Layout = "_Layout";
+
+    var settings = await SettingsLoader.Load();
+
+    // Get all purchaseable only
+    var modules = (await ManagerClient.GetModules()).ToList().FindAll(m => m.Purchaseable);
+
+    var moduleInfo = new Dictionary<UIModuleGroup, IEnumerable<SnapWebModule?>>
+    {
+        { UIModuleGroup.Access, modules.FindAll(m => m.Category == SnapWebModuleCategory.Access) },
+        { UIModuleGroup.Actions, modules.FindAll(m => m.Category == SnapWebModuleCategory.Action) },
+        { UIModuleGroup.Functionality, modules.FindAll(m => m.Category == SnapWebModuleCategory.Functionality) }
+    }; 
+
+    var invoices = await ManagerClient.GetInvoices();
+    var pendingInvoices = invoices?.Where(i => i.ParsedStatus == InvoiceStatus.New) ?? new List<InvoiceModel>();
+}
+
+<p>Your access is authorized until <strong>@settings.AccessDeadline</strong></p>
+<p>You can have up to <strong>@settings.MaxManagedAccounts</strong> managed accounts</p>
+<p>You can use up to <strong>@Utilities.BytesToString(settings.MaxQuotaMb * Utilities.BytesToMbConversionLiteral)</strong> of storage.</p>
+<p>You can have up to <strong>@settings.MaxTasks</strong> jobs at the same time, with up to <strong>@settings.Threads</strong> threads on each running job.</p>
+
+<p>Select which add-ons you would like to purchase. Each purchase provides you access to the specific feature for <strong>1 week</strong>.</p>
+<p>Payments and orders might take up to a few hours to complete, the payment is sent, please be patient before submitting your issues in our discord server.</p>
+<hr class="mb-3" />
+@if (pendingInvoices.Any())
+{
+    <p>You have <strong class="text-danger">PENDING</strong> invoices:</p>
+    <div>
+        @foreach (var invoice in pendingInvoices)
+        {
+            <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action d-flex align-items-center text-white" onclick="ShowInvoiceCheckout('@invoice.Id')">
+                    <div class="w-60px h-60px d-flex align-items-center justify-content-center ms-n1">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+                    <div class="flex-fill px-3">
+                        @foreach (var info in invoice.PurchaseInfos)
+                        {
+                            var moduleDetails = modules.Find(m => m.Id == info.ModuleId);
+                            <div class="small text-white text-opacity-50">@moduleDetails?.Name x @info.Quantity
+                            </div>
+                        }
+                    </div>
+                    <div class="w-80px d-flex align-items-center justify-content-end">
+                        <span class="label bg-transparent border border-theme text-theme fs-12px fw-500 rounded-sm px-2">
+                            @invoice.Amount.ToString("C0")
+                        </span>
+                    </div>
+                </button>
+            </div>
+        }
+    </div>
+    <hr class="mb-3" />
+}
+<form>
+    @foreach (var kvp in moduleInfo)
+    {
+        <div class="row">
+            <h4>@kvp.Key.ToString()</h4>
+            @foreach (var moduleDetails in kvp.Value)
+            {
+                var isDefaultOs = moduleDetails.Id == settings.DefaultOs;
+                <div class="list-group @(isDefaultOs ? "disabled-item-row" : "")">
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center text-white" onclick="AddToCart(this, @moduleDetails.ToJson())" @(isDefaultOs ? "disabled=disabled" : "")>
+                        <div class="w-60px h-60px d-flex align-items-center justify-content-center ms-n1">
+                            <i class="@moduleDetails.SnapWebIconClass"></i>
+                        </div>
+                        <div class="flex-fill px-3">
+                            <div class="fw-bold">@moduleDetails.Name @(isDefaultOs ? "(Default)" : "")</div>
+                            <div class="small text-white text-opacity-50">@moduleDetails.Description</div>
+                        </div>
+                        <div class="w-80px d-flex align-items-center justify-content-end">
+                            <span class="label bg-transparent border border-theme text-theme fs-12px fw-500 rounded-sm px-2">
+                                @moduleDetails.Price.ToString("C0")
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            }
+        </div>
+        <hr/>
+    }
+</form>
+
+<hr class="mb-3"/>
+
+<h3><i class="fa fa-cart-shopping"></i> Cart</h3>
+<div id="cart">
+    <div id="cartItemsContainer"></div>
+    <hr/>
+    <div class="d-flex h4 align-items-end justify-content-end">
+        <div class="d-flex">Total:</div>
+        <div class="d-flex ms-1">$<span id="cartTotal">0</span></div>
+    </div>
+</div>
+<hr/>
+<div class="d-flex align-items-end justify-content-end">
+    <button type="button" class="btn btn-outline-theme" onclick="CreateInvoice()"><i class="bi bi-send-check fa-lg"></i> Submit Invoice</button>
+</div>
+
+<div id="cartItem" class="list-group d-none cartItem mb-2">
+    <input type="hidden" class="cartItemModuleId"/>
+    <div class="list-group-item list-group-item-action d-flex align-items-center text-white">
+        <div class="w-60px h-60px d-flex align-items-center justify-content-center ms-n1 cartItemIcon">
+            <i class="bi bi-blockquote-left "></i>
+        </div>
+        <div class="flex-fill px-3">
+            <div class="fw-bold cartItemName"></div>
+            <div class="small text-white text-opacity-50 cartItemPrice mb-2"></div>
+            <div class="d-flex">
+                <button type="button" href="#" class="btn btn-outline-danger btn-sm me-2" onclick="RemoveItem(this);">
+                    <i class="fa fa-trash-can"></i>
+                </button>
+                <button type="button" href="#" class="btn btn-outline-theme btn-sm" onclick="MinusItem(this);">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <input type="number" class="form-control w-50px form-control-sm mx-2 bg-white bg-opacity-25 bg-white bg-opacity-25 text-center cartItemQuantity" onchange="UpdateCartItemQuantity(this);" min="0" step="1" value="1">
+                <button type="button" class="btn btn-outline-theme btn-sm" onclick="AddItem(this);">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="w-80px d-flex align-items-center justify-content-end">
+            <span class="label bg-transparent border border-theme text-theme fs-12px fw-500 rounded-sm cartItemTotalPrice px-2">
+            </span>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://jsnap.llc/modal/btcpay.js?1504"></script>
+    <script src="/js/purchase.js?1504"></script>
+}

@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  app:
+    image: jsnapllc/snapweb:latest
+    ports:
+      - $SERVICE_PORT:$SERVICE_PORT
+    environment:
+      MANAGER_URL: "https://snapwebmanager.jsnap.io"
+      ASPNETCORE_URLS: "http://*:$SERVICE_PORT"
+      SNAPWEB_CLIENTID: $CLIENTID
+    networks:
+      - traefik-public
+    volumes:
+      - /mnt/storage-pool/snapweb/customer_name_here:/db
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 16000M
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.snapweb-$SERVICE_HOSTNAME.rule=Host(`$SERVICE_HOSTNAME.jsnap.io`)
+        - traefik.http.routers.snapweb-$SERVICE_HOSTNAME.entrypoints=https
+        - traefik.http.routers.snapweb-$SERVICE_HOSTNAME.tls=true
+        - traefik.http.routers.snapweb-$SERVICE_HOSTNAME.tls.certresolver=le
+        - traefik.http.routers.snapweb-$SERVICE_HOSTNAME.service=snapweb-$SERVICE_HOSTNAME
+        - traefik.http.services.snapweb-$SERVICE_HOSTNAME.loadbalancer.server.port=$SERVICE_PORT
+      placement:
+        constraints:
+          - node.role == worker
+          
+networks:
+  traefik-public:
+    external: true

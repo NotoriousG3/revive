@@ -1,0 +1,67 @@
+﻿@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.SendMessage);
+}
+<div class="card action-card text-bg-secondary">
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">
+            Send Mention
+            @if (!isEnabled)
+            {
+                <a id="purchaseSendMessage" class="btn btn-sm bg-dark text-success" href="@Url.Action("Purchase", "Home")" data-bs-toggle="tooltip" data-bs-title="Purchase Send Message Module">
+                    <i class="fa fa-dollar-sign"></i>
+                </a>
+            }
+        </h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <div class="mb-2">
+            <label for="sendMention_user" class="form-label">User</label>
+            <input type="text" class="form-control" id="sendMention_user" @(!isEnabled ? "disabled" : "")/>
+        </div>
+        <div class="form-control text-bg-dark mb-2">
+            <label for="sendMentionTargetAmount" class="form-label">Number of random targets</label>
+            <input type="number" id="sendMentionTargetAmount" min="1" max="200" value="1" class="form-control"/><br />
+            <input type="checkbox" id="sendMention_RandomTargets" name="sendMention_RandomTargets" value="true"/>
+            <label for="sendMention_RandomTargets" class="form-label"><span style="color: #FFF; ">Send mentions to random targets in database</span></label>
+            <label for="countryFilters">Country:</label>
+            <select class="form-control text-bg-dark" name="countryFilter_Mentioned" id="countryFilter_Mentioned">
+                <option value="ANY">ANY</option>
+                <option value="ARABIC COUNTRIES">ARABIC COUNTRIES</option>
+                <option value="US">US</option>
+                <option value="CA">CA</option>
+                <option value="UK">UK</option>
+                <option value="NL">NL</option>
+                <option value="DE">DE</option>
+                <option value="ID">ID</option>
+                <option value="HK">HK</option>
+                <option value="MX">MX</option>
+                <option value="BR">BR</option>
+            </select>
+            <label for="genderFilters">Gender:</label>
+            <select class="form-control text-bg-dark" name="genderFilter_Mentioned" id="genderFilter_Mentioned">
+                <option value="ANY">ANY</option>
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+            </select>
+            <label for="raceFilters">Race:</label>
+            <select class="form-control text-bg-dark" name="raceFilter_Mentioned" id="raceFilter_Mentioned">
+                <option value="ANY">ANY</option>
+                <option value="WHITE">WHITE</option>
+                <option value="HISPANIC">HISPANIC</option>
+                <option value="BLACK">BLACK</option>
+                <option value="ASIAN">ASIAN</option>
+            </select><br /><br />
+        </div>
+        <div class="form-control text-bg-dark mb-2">
+            <label for="sendMention_FriendsOnly"></label>
+            <input type="checkbox" id="sendMention_FriendsOnly" name="sendMention_FriendsOnly" value="randomize" /> 
+            Send mention to friends only<br />
+        </div>
+        @await Component.InvokeAsync("TargetUserList", new [] { "Target Users", "sendMention_users" })
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-outline-light @(!isEnabled ? "disabled" : "")" onclick="SendMention(this)">Run</button>
+    </div>
+</div>

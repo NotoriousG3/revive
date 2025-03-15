@@ -1,0 +1,36 @@
+﻿@using TaskBoard.ViewComponents
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h5>Purge / Export Filters</h5>
+<div class="row mb-2">
+    <label for="filterEmailValidation" class="col-form-label col-sm-2">Email Validation</label>
+    <div class="col">
+        @await Component.InvokeAsync(nameof(AccountPurgeFilterSelect), new AccountPurgeFilterSelectViewArguments() { ControlId = "filterEmailValidation", ShowLabel = false })
+    </div>
+</div>
+<div class="row mb-2">
+    <label for="filterPhoneValidation" class="col-form-label col-sm-2">Phone Validation</label>
+    <div class="col">
+        @await Component.InvokeAsync(nameof(AccountPurgeFilterSelect), new AccountPurgeFilterSelectViewArguments() { ControlId = "filterPhoneValidation", ShowLabel = false })
+    </div>
+</div>
+<div class="row mb-2">
+    <label for="filterStatus" class="col-form-label col-sm-2">Status</label>
+    <div class="col">
+        @await Component.InvokeAsync(nameof(AccountPurgeFilterSelect), new AccountPurgeFilterSelectViewArguments() { ControlId = "filterStatus", ShowLabel = false })
+    </div>
+</div>
+<div class="row mb-2">
+    <label for="filterHasAdded" class="col-form-label col-sm-2">Has Finished Adding</label>
+    <div class="col">
+        @await Component.InvokeAsync(nameof(AccountPurgeFilterSelect), new AccountPurgeFilterSelectViewArguments() { ControlId = "filterHasAdded", ShowLabel = false })
+    </div>
+</div>
+<div class="d-flex justify-content-start mb-2">
+    <button type="button" class="btn btn-outline-danger text-bg-dark ms-2" onclick="ShowPurgeAccountFilterModal();"><i class="fa fa-circle-radiation"></i> Purge Accounts</button>
+    <a href="#" button type="button" class="btn btn-outline-yellow text-bg-dark ms-2" id="btn_modalExportAccountFiltered"><i class="fa fa-save"></i> Export to disk</a>
+</div>
+<div class="row">
+    @await Component.InvokeAsync(nameof(SnapchatAccountsDatatable), new SnapchatAccountDatatableArgs() { ShowEditGroupButton = true })
+</div>
+<partial name="_ManageAccountGroupsModal"/>

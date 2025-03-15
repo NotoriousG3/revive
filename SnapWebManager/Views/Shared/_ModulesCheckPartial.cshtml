@@ -1,0 +1,23 @@
+﻿@using SnapWebModels
+@using System.Text.RegularExpressions
+@model SnapWebModels.SnapWebClientModel
+
+<h3 class="mt-2">Modules</h3>
+<div class="row">
+    @{
+        foreach (var module in SnapWebModule.DefaultModules)
+        {
+            var moduleName = Enum.GetName(module.Id);
+            var id = $"module{moduleName}";
+            var prettyName = Regex.Replace(moduleName, "(\\B[A-Z])", " $1");
+            var moduleValue = module.Id;
+            var enabled = Model?.AllowedModules?.Select(a => a.ModuleId).Contains(module.Id) ?? module.Enabled;
+            <div class="form-check">
+                <input type="checkbox" id="@id" class="form-check-input" name="EnabledModules" value="@moduleValue" @(enabled ? "checked" : "")/>
+                <label class="form-check-label" for="@id">
+                    @prettyName
+                </label>
+            </div>
+        }
+    }
+</div>

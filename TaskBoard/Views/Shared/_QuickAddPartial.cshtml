@@ -1,0 +1,37 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.QuickAdd);
+}
+<div class="card action-card text-bg-secondary">
+    @if (!isEnabled)
+    {
+        <a id="purchaseAddFriend" class="btn btn-sm bg-dark text-success" href="@Url.Action("Purchase", "Home")" data-bs-toggle="tooltip" data-bs-title="Purchase AcceptFriend Module">
+            <i class="fa fa-dollar-sign"></i>
+        </a>
+    }
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">Quick Add</h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <div class="form-control text-bg-dark mb-2">
+            <label for="quickFriends_Max" class="form-label">Amount of Friends to Add</label>
+            <input type="number" id="quickFriends_Max" min="1" max="100" value="100" class="form-control"/>
+                <label for="quickFriends_minFriends" class="form-label">Min. Friends Account Must Have</label>
+                <input type="number" id="quickFriends_minFriends" min="0" max="2000" value="0" class="form-control"/>
+                <label for="quickFriends_maxFriends" class="form-label">Max. Friends Account Must Have</label>
+                <input type="number" id="quickFriends_maxFriends" min="1" max="2000" value="2000" class="form-control"/>
+            <label for="quickFriends_Delay" class="form-label">Delay between adds</label>
+            <input type="number" id="quickFriends_Delay" min="5" max="300" value="30" class="form-control"/><br/>
+        </div>
+    </div>
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-footer">
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light text-bg-dark" onclick="QuickAdd(this)">Run</button>
+        }
+    </div>
+</div>

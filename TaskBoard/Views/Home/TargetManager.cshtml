@@ -1,0 +1,77 @@
+﻿@using TaskBoard.ViewComponents
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Target Manager";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<form>
+    <div class="row mb-2">
+        <div class="col col-sm-6 mb-2">
+            <h4>New Target User</h4>
+            <div class="mb-2">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" class="form-control"/>
+            </div>
+            <button type="button" class="btn btn-outline-light text-bg-dark" id="btn_addUser">
+                Save
+            </button>
+        </div>
+        <div class="col col-sm-6 mb-2">
+            <label for="usersUploadFile" class="form-label">Upload users from file</label>
+            <input type="file" id="usersUploadFile" name="usersUploadFile" class="form-control" accept="text/plain" />
+            <div class="form-text text-white-50 mb-2">Input file with the following format: USERNAME</div>
+            <button type="button" id="btn_uploadUsers" class="btn btn-outline-light text-bg-dark">Upload</button>
+        </div>
+    </div>
+</form>
+<hr class="mb-2"/>
+
+<label for="Title" class="form-label col-lg-5">Purge / Export Filters</label><br />
+<div class="d-flex justify-content-start col-sm-5 ms-2 mb-2">
+    <label for="filterCountryCode" class="form-label col-sm-2">Country</label><br />
+    @await Component.InvokeAsync(nameof(TargetPurgeFilterSelect), new TargetPurgeFilterSelectViewArguments() { ControlId = "filterCountryCode", ShowLabel = false })
+</div>
+<div class="d-flex justify-content-start col-sm-5 ms-2 mb-2">
+    <label for="filterGender" class="form-label col-sm-2">Gender</label><br />
+    @await Component.InvokeAsync(nameof(TargetPurgeFilterSelect), new TargetPurgeFilterSelectViewArguments() { ControlId = "filterGender", ShowLabel = false })
+</div>
+<div class="d-flex justify-content-start col-sm-5 ms-2 mb-2">
+    <label for="filterRace" class="form-label col-sm-2">Race</label><br />
+    @await Component.InvokeAsync(nameof(TargetPurgeFilterSelect), new TargetPurgeFilterSelectViewArguments() { ControlId = "filterRace", ShowLabel = false })
+</div>
+<div class="d-flex justify-content-start col-sm-5 ms-2 mb-2">
+    <label for="filterAdded" class="form-label col-sm-2">Added</label><br />
+    @await Component.InvokeAsync(nameof(TargetPurgeFilterSelect), new TargetPurgeFilterSelectViewArguments() { ControlId = "filterAdded", ShowLabel = false })
+</div>
+<div class="d-flex justify-content-start col-sm-5 ms-2 mb-2">
+    <label for="filterSearched" class="form-label col-sm-2">Searched</label><br />
+    @await Component.InvokeAsync(nameof(TargetPurgeFilterSelect), new TargetPurgeFilterSelectViewArguments() { ControlId = "filterSearched", ShowLabel = false })
+</div><br />
+<div class="d-flex justify-content-start">
+    <button type="button" class="btn btn-outline-danger text-bg-dark ms-2" onclick="ShowPurgeFilterModal();"><i class="fa fa-circle-radiation"></i> Purge Targets</button>
+    <a href="#" button type="button" class="btn btn-outline-yellow text-bg-dark ms-2" id="btn_modalExportFiltered"><i class="fa fa-save"></i> Export to disk</a>
+</div><br />
+<hr class="mb-2"/>
+<table class="table table-dark" id="targetsTable" style="width: 100%;">
+    <thead>
+    <th></th>
+    <th>Id</th>
+    <th>Country</th>
+    <th>Gender</th>
+    <th>Race</th>
+    <th>UserId</th>
+    <th>Username</th>
+    <th>Added</th>
+    <th>Searched</th>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+    <script src="/assets/plugins/datatables.net/js/jquery.dataTables.js?1504"></script>
+    <script src="/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1504"></script>
+    <script src="/js/targetmanager.js?1504"></script>
+}

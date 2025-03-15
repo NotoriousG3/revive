@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  snapwebmanager:
+    image: snapwebmanager:latest
+    ports:
+      - 4000:4000
+    environment:
+      JSNAP_DEFAULT_APIKEY: ${DEFAULT_APIKEY}
+      JSNAP_PAYAUTH: ${PAYSERVERAUTH}
+      JSNAP_SERVERURL: ${PAYSERVERURL}
+      JSNAP_STOREID: ${PAYSERVERSTOREID}
+      SENDGRID_API_KEY: ${SENDGRID_API}
+      SENDGRID_FROM_EMAIL: "no-reply@jsnap.io"
+      SENDGRID_FROM_NAME: "Snapweb Admin"
+    volumes:
+      - ./snapwebmanager-db:/db
+    networks:
+      - default
+
+  snapweb:
+    image: snapweb:latest
+    ports:
+      - ${SERVICE_PORT}:${SERVICE_PORT}
+    environment:
+      MANAGER_URL: "http://snapwebmanager:4000"
+      ASPNETCORE_URLS: "http://*:${SERVICE_PORT}"
+      SNAPWEB_CLIENTID: ${CLIENTID}
+    networks:
+      - default
+    volumes:
+      - ./snapweb-db:/db
+
+networks:
+  default:

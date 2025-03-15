@@ -1,0 +1,41 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Email Tools";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<form>
+    <div class="row mb-2">
+        <div class="col-xxl-3 col-sm-6 mb-2">
+            <label for="emailsUploadFile" class="form-label">Upload emails from file</label>
+            <input type="file" id="emailsUploadFile" name="emailsUploadFile" class="form-control" accept="text/plain"/>
+            <div class="form-text text-white-50 mb-2">Input file with the following format: <strong>EMAIL</strong> or <strong>EMAIL:PASSWORD</strong></div>
+            <button type="button" id="btn_uploadEmails" class="btn btn-outline-light text-bg-dark ml-2">Upload</button>
+        </div>
+    </div>
+</form>
+<div class="mb-2"></div>
+<div class="row">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-danger text-bg-dark ms-4" onclick="ShowPurgeModal();"><i class="fa fa-circle-radiation"></i> Purge E-Mails</button>
+    </div>
+</div>
+
+<table class="table table-dark" id="emailsTable" style="width: 100%;">
+    <thead>
+    <th></th>
+    <th>Address</th>
+    <th>Password</th>
+    <th>Used By</th>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+    <script src="/assets/plugins/datatables.net/js/jquery.dataTables.js?1504"></script>
+    <script src="/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1504"></script>
+    <script src="/js/classes/emailmanager.js?1504"></script>
+    <script src="/js/emailtools.js?1504"></script>
+}

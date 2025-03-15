@@ -1,0 +1,74 @@
+@model IEnumerable<SnapWebModels.SnapWebClientModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ClientId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxManagedAccounts)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxTasks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxAddFriendsUsers)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxQuotaMb)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccessDeadline) (UTC)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxManagedAccounts)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Threads)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxTasks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxAddFriendsUsers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxQuotaMb)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccessDeadline)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ClientId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ClientId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ClientId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,19 @@
+﻿@model TaskBoard.ViewComponents.FriendsGraphViewModel
+
+<!-- html -->
+<div id="friendCountGraph"></div>
+
+<!-- script -->
+<script>
+  let friendsSeries = [
+      { data: [
+        { x: 'Pending Friends', y: @Model.pendingFriends },
+        { x: 'Mutual Friends', y: @Model.mutualFriends },
+      ]}
+    ];
+    CreateBarChart('#friendCountGraph', "Total Amount of Friends", 300, friendsSeries, {
+        theme: {
+            palette: 'palette3'
+        }
+    });
+</script>

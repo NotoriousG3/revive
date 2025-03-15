@@ -1,0 +1,17 @@
+﻿@model TaskBoard.ViewComponents.MessagesGraphViewModel
+
+<!-- html -->
+<div id="messagesChart"></div>
+
+<!-- script -->
+<script>
+  let messagesSeries = [
+    { data: [
+      { x: 'Friends Added', y: @Model.TotalFriendsAdded },
+      { x: 'Messages Sent', y: @Model.MessagesSent }, 
+      { x: 'Posts Sent', y: @Model.PostsSent }
+    ]}
+  ];
+  CreateBarChart('#messagesChart', "Interaction Stats", 300, messagesSeries)
+</script>
+

@@ -1,0 +1,22 @@
+﻿@model TaskBoard.ViewComponents.LockedAccountsGraphViewModel
+
+<!-- html -->
+<div id="lockedAccountsGraph"></div>
+
+<!-- script -->
+<script>
+  let lockedAccountSeries = [
+      { data: [
+        { x: 'Accounts Okay', y: @Model.okayAccounts },
+        { x: 'Accounts Locked', y: @Model.lockedAccounts },
+        { x: 'Accounts Banned', y: @Model.bannedAccounts },
+        { x: 'Accounts Rate Limited', y: @Model.rateLimited },
+        { x: 'Accounts Need Checked', y: @Model.needsChecked },
+      ]}
+    ];
+    CreateBarChart('#lockedAccountsGraph', "Account Status", 300, lockedAccountSeries, {
+        theme: {
+            palette: 'palette3'
+        }
+    });
+</script>

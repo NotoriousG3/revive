@@ -1,0 +1,40 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.AcceptFriend);
+}
+<div class="card action-card text-bg-secondary">
+        @if (!isEnabled)
+            {
+                <a id="purchaseAddFriend" class="btn btn-sm bg-dark text-success" href="@Url.Action("Purchase", "Home")" data-bs-toggle="tooltip" data-bs-title="Purchase AcceptFriend Module">
+                    <i class="fa fa-dollar-sign"></i>
+                </a>
+            }
+        <div class="card-header text-bg-primary">
+        <h5 class="card-title">Accept Friends</h5>
+    </div>
+        <div class="card-body text-bg-dark">
+            <div class="form-control text-bg-dark mb-2">
+                <label for="acceptFriends_Max" class="form-label">Amount of Friends to Accept</label>
+                <input type="number" id="acceptFriends_Max" min="1" max="100" value="100" class="form-control"/>
+                <label for="acceptFriends_Delay" class="form-label">Delay between accepts</label>
+                <input type="number" id="acceptFriends_Delay" min="5" max="300" value="30" class="form-control"/><br/>
+                <label for="acceptSendMessage_message" class="form-label">Message on accepting</label>
+                <input type="text" class="form-control" id="acceptSendMessage_message"/>
+                <div class="mb-2 pt-2" id="postDirect_snaps">
+                    <h5 class="mb-2">Snaps</h5>
+                    <div id="snapsContainer" class="mb-2"></div>
+                    <button type="button" class="btn btn-sm btn-outline-green text-bg-success" id="btn_addSnap">Add Snap after Accepting</button>
+                </div>
+            </div>
+        </div>
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-footer">
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light text-bg-dark" onclick="AcceptFriend(this)">Run</button>
+        }
+    </div>
+</div>

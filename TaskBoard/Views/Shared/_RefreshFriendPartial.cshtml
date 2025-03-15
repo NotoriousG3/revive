@@ -1,0 +1,27 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.RefreshFriends);
+}
+<div class="card action-card text-bg-secondary">
+    @if (!isEnabled)
+    {
+        <a id="purchaseAddFriend" class="btn btn-sm bg-dark text-success" href="@Url.Action("Purchase", "Home")" data-bs-toggle="tooltip" data-bs-title="Purchase RefreshFriend Module">
+            <i class="fa fa-dollar-sign"></i>
+        </a>
+    }
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">Refresh Friends</h5>
+    </div>
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-body text-bg-dark">
+        <div class="card-footer">
+            @if (isEnabled)
+            {
+                <button type="button" class="btn btn-outline-light text-bg-dark" onclick="RefreshFriends(this)">Run</button>
+            }
+        </div>
+    </div>
+</div>

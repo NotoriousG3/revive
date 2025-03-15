@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  app:
+    image: jsnapllc/snapwebmanager:latest
+    ports:
+      - 4000:4000
+    environment:
+      JSNAP_DEFAULT_APIKEY: $DEFAULT_APIKEY
+      JSNAP_PAYAUTH: $PAYSERVERAUTH
+      JSNAP_SERVERURL: $PAYSERVERURL
+      JSNAP_STOREID: $PAYSERVERSTOREID
+      SENDGRID_API_KEY: $SENDGRID_API
+      SENDGRID_FROM_EMAIL: "no-reply@jsnap.io"
+      SENDGRID_FROM_NAME: "Snapweb Admin"
+    volumes:
+      - /mnt/storage-pool/snapwebmanager:/db
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.snapwebmanager.entrypoints=https
+        - traefik.http.routers.snapwebmanager.tls=true
+        - traefik.http.routers.snapwebmanager.tls.certresolver=le
+        - traefik.http.routers.snapwebmanager.rule=Host(`snapwebmanager.jsnap.io`)
+        - traefik.http.routers.snapwebmanager.service=snapwebmanager
+        - traefik.http.services.snapwebmanager.loadbalancer.server.port=4000
+      placement:
+        constraints:
+          - node.role == manager
+          
+networks:
+  traefik-public:
+    external: true

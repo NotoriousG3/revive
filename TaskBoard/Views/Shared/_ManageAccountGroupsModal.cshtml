@@ -1,0 +1,24 @@
+﻿@using TaskBoard.ViewComponents
+<div id="manageAccountGroupsModal" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <label for="accountGroupModalGroupSelect" class="form-label">Select group to add</label>
+                    @await Component.InvokeAsync(nameof(AccountGroupSelect), new AccountGroupSelectViewArguments() { ControlId = "accountGroupModalGroupSelect", ShowLabel = false })
+                    <button type="button" class="btn btn-sm btn-outline-light text-bg-dark mt-2" onclick="AddAccountToSelectedGroup()">Add</button>
+                </div>
+                <hr />
+                <div class="row">
+                    <h5>Current Groups</h5>
+                    <div class="groupContainer"></div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="accountGroupModalAccountId" />
+    </div>
+</div>

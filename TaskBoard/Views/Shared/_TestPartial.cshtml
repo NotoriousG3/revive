@@ -1,0 +1,45 @@
+﻿@using TaskBoard.ViewComponents
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+<div class="card action-card text-bg-secondary">
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">Test Job</h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <div>
+            <label for="test_pass" class="form-check-label">Pass</label>
+            <input type="checkbox" id="test_pass" required="true" class="form-check form-check-input" checked/>
+        </div>
+        <div>
+            <label for="test_delayMs" class="form-label">Delay (ms)</label>
+            <input type="number" id="test_delayMs" required="true" class="form-control" value="1000000"/>
+        </div>
+        <div>
+            <label for="test_accountIds" class="form-label">Account Ids</label>
+            <input type="text" id="test_accountIds" class="form-control"/>
+        </div>
+        <div class="form-control text-bg-dark mb-2">
+            <input type="checkbox" id="test_isLink" name="isLink" value="true" />
+            <label for="test_isLink" class="form-label"><span style="color: #FFF; ">Send message as Link</span></label>
+        </div>
+        <div class="form-control text-bg-dark mb-2">
+            <label for="testTargetAmount" class="form-label">Number of random targets</label>
+            <input type="number" id="testTargetAmount" min="1" max="200" value="1" class="form-control"/><br />
+            <input type="checkbox" id="test_RandomTargets" name="test_RandomTargets" value="true"/>
+            <label for="test_RandomTargets" class="form-label"><span style="color: #FFF; ">Send message to random targets in database</span></label>
+        </div>
+        <div class="form-control text-bg-dark mb-2">
+            <label for="test_FriendsOnly"></label>
+            <input type="checkbox" id="test_FriendsOnly" name="test_FriendsOnly" value="randomize" /> 
+            Send message to friends only<br />
+        </div>
+        @await Component.InvokeAsync("TargetUserList", new [] { "Target Users", "test_users" })
+        <div class="mb-2">
+            <form action="api/upload" method="post" enctype="multipart/form-data" id="test_uploadForm">
+                @await Component.InvokeAsync("MediaSelect", new MediaSelectInvokeArguments () { ControlIdPrefix = "test" })
+            </form>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary" onclick="Test(this)">Run</button>
+    </div>
+</div>

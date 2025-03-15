@@ -1,0 +1,63 @@
+﻿@using SnapWebModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject ModuleEnabler ModuleEnabler
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Private Actions";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+
+<div class="row mb-3">
+    <partial name="_CommonActionControlsPartial"/>
+</div>
+<hr/>
+<div class="row mb-2">
+    @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.Subscribe))
+    {
+        <div class="col-sm-6 col-xxl-2 mb-2">
+            <partial name="_SubscribePartial"/>
+        </div>
+    }
+    @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.ReportUserRandom))
+    {
+        <div class="col-sm-6 col-xxl-2 mb-2">
+            <partial name="_ReportUserRandomPartial"/>
+        </div>
+    }
+    <!--@if (await ModuleEnabler.IsEnabled(SnapWebModuleId.ReportUserPublicProfileRandom))
+    {
+        <div class="col-sm-6 col-xxl-2 mb-2">
+            <partial name="_ReportUserPublicProfileRandomPartial"/>
+        </div>
+    }-->
+    @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.ViewBusinessPublicStory))
+    {
+        <div class="col-sm-6 col-xxl-2 mb-2">
+            <partial name="_ViewBusinessPublicStoryPartial"/>
+        </div>
+    }
+    @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.ViewPublicStory))
+    {
+        <div class="col-sm-6 col-xxl-2 mb-2">
+            <partial name="_ViewPublicStoryPartial"/>
+        </div>
+    }
+    @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.ReportUserStoryRandom))
+    {
+        <div class="col-sm-6 col-xxl-2 mb-2">
+            <partial name="_ReportUserStoryRandomPartial"/>
+        </div>
+    }
+    @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.Test))
+    {
+        <div class="col-sm-6 col-xxl-2 mb-2">
+            <partial name="_TestPartial"/>
+        </div>
+    }
+</div>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+    <script src="/js/otherActions.js?1504"></script>
+}

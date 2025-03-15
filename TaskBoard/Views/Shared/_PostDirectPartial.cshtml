@@ -1,0 +1,72 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.PostDirect);
+}
+<div class="card action-card text-bg-secondary">
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">Post Direct</h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <div class="form-control text-bg-dark mb-2">
+            <label for="postDirectTargetAmount" class="form-label">Number of random targets</label>
+            <input type="number" id="postDirectTargetAmount" min="1" max="200" value="1" class="form-control"/><br />
+            <label for="postDirect_RandomTargets"></label>
+            <input type="checkbox" id="postDirect_RandomTargets" name="postDirect_RandomTargets" value="randomize" /> 
+            Post to random targets in database<br />
+            <label for="countryFilters">Country:</label>
+            <select class="form-control text-bg-dark" name="countryFilter" id="countryFilter">
+                <option value="ANY">ANY</option>
+                <option value="ARABIC COUNTRIES">ARABIC COUNTRIES</option>
+                <option value="US">US</option>
+                <option value="CA">CA</option>
+                <option value="UK">UK</option>
+                <option value="NL">NL</option>
+                <option value="DE">DE</option>
+                <option value="ID">ID</option>
+                <option value="HK">HK</option>
+                <option value="MX">MX</option>
+                <option value="BR">BR</option>
+            </select>
+            <label for="genderFilters">Gender:</label>
+            <select class="form-control text-bg-dark" name="genderFilter" id="genderFilter">
+                <option value="ANY">ANY</option>
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+            </select>
+            <label for="raceFilters">Race:</label>
+            <select class="form-control text-bg-dark" name="raceFilter" id="raceFilter">
+                <option value="ANY">ANY</option>
+                <option value="WHITE">WHITE</option>
+                <option value="HISPANIC">HISPANIC</option>
+                <option value="BLACK">BLACK</option>
+                <option value="ASIAN">ASIAN</option>
+            </select>
+            <label for="postDirect_RotateAmount" class="form-label">Amount of snaps per link rotation</label>
+            <input type="number" id="postDirect_RotateAmount" min="0" max="10000" value="0" class="form-control"/><br /><br />
+        </div>
+        <div class="form-control text-bg-dark mb-2">
+            <label for="postDirect_FriendsOnly"></label>
+            <input type="checkbox" id="postDirect_FriendsOnly" name="postDirect_FriendsOnly" value="randomize" /> 
+            Post to friends only<br />
+        </div>
+        @if (isEnabled)
+        {
+            @await Component.InvokeAsync("TargetUserList", new [] { "Target Users", "postDirect_users" })
+        }
+        <div class="mb-2 pt-2" id="postDirect_snaps">
+            <h5 class="mb-2">Snaps</h5>
+            <div id="snapsContainer" class="mb-2"></div>
+            <button type="button" class="btn btn-sm btn-outline-green text-bg-success" id="btn_addSnap">Add Snap Media</button>
+        </div>
+    </div>
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-footer">
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light text-bg-dark" onclick="PostDirect(this)">Run</button>
+        }
+    </div>
+</div>

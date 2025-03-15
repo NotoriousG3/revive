@@ -1,0 +1,9 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<WebSnapchatVersion>
+@{
+    var items = (from version in Model where version.CanRegister select new SelectListItem(version.SnapchatVersion.ToString(), version.SnapchatVersion.ToString())).ToList();
+}
+
+<label for="snapchatVersion" class="form-label">Snapchat Version</label>
+<select id="snapchatVersion" asp-items="items" class="form-control text-bg-dark">
+</select>

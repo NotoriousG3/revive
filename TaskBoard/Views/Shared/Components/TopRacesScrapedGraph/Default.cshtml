@@ -1,0 +1,13 @@
+﻿@model TaskBoard.ViewComponents.TopRacesScrapedGraphViewModel
+
+<!-- html -->
+<div id="topRacesChart"></div>
+
+<!-- script -->
+<script>
+  let topRacesSeries = @Html.Raw(Json.Serialize(Model.Races.Values));
+  let topRacesLabels = @Html.Raw(Json.Serialize(Model.Races.Keys));
+
+  CreatePieChart('#topRacesChart', 'Top Scraped Races', 300, topRacesSeries, topRacesLabels);
+</script>
+

@@ -1,0 +1,44 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Macro Manager";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<form>
+    <div class="row mb-2">
+        <div class="col-xxl-3 col-sm-6 mb-2">
+            <label for="macrosUploadFile" class="form-label">Upload macros from file</label>
+            <input type="file" id="macrosUploadFile" name="macrosUploadFile" class="form-control" accept="text/plain"/>
+            <div class="form-text text-white-50 mb-2">Input file with the following format: MACRO:TEXT</div>
+            <button type="button" id="btn_uploadMacros" class="btn btn-outline-light text-bg-dark ml-2">Upload</button><br /><br />
+            Built in macros:<br /><br />
+            <li>#name - Prints the current targets username</li>
+            <li>#display_name - Prints the current targets display name</li>
+        </div>
+    </div>
+</form>
+<div class="mb-2"></div>
+<div class="row">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-danger text-bg-dark ms-4" onclick="ShowPurgeModal();"><i class="fa fa-circle-radiation"></i> Purge Macros</button>
+    </div>
+</div>
+
+<table class="table table-dark" id="macrosTable" style="width: 100%;">
+    <thead>
+    <th></th>
+    <th>ID</th>
+    <th>Macro</th>
+    <th>Text</th>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+    <script src="/assets/plugins/datatables.net/js/jquery.dataTables.js?1502"></script>
+    <script src="/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1502"></script>
+    <script src="/js/classes/macromanager.js?1502"></script>
+    <script src="/js/macrotools.js?1502"></script>
+}

@@ -1,0 +1,72 @@
+﻿@using TaskBoard.ViewComponents
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Proxy Manager";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var proxyTypeItems = Enum.GetValues<ProxyType>().Select(v => new SelectListItem(v.ToString(), ((int)v).ToString()));
+}
+<form>
+    <div class="row mb-2">
+        <div class="col col-sm-6 mb-2">
+            <h4>New Proxy</h4>
+            <div class="mb-2">
+                <label for="proxy" class="form-label">Proxy Ip/Hostname</label>
+                <input type="text" id="proxy" placeholder="proxy.url:port" class="form-control" />
+                <div class="form-text">Proxy URL must be a valid URi, including protocol (http/https)</div>
+            </div>
+            <div class="mb-2">
+                <label for="proxy_user" class="form-label">Proxy User</label>
+                <input type="text" id="proxy_user" class="form-control"/>
+            </div>
+            <div class="mb-2">
+                <label for="proxy_pass" class="form-label">Proxy Pass</label>
+                <input type="text" id="proxy_pass" class="form-control"/>
+            </div>
+            <div class="mb-2">
+                <label for="uploadGroupId" class="form-label">Group</label>
+                @await Component.InvokeAsync(nameof(ProxyGroupSelect), new ProxyGroupSelectViewArguments() { ControlId = "uploadGroupId", ShowLabel = false })
+            </div>
+            <button type="button" class="btn btn-outline-light text-bg-dark" id="btn_addProxy">
+                Save
+            </button>
+        </div>
+        <div class="col col-sm-6 mb-2">
+            <div class="row mb-2">
+                <label for="proxyUploadFile" class="form-label">Upload proxies from file</label>
+                <input type="file" id="proxyUploadFile" name="proxyUploadFile" class="form-control" accept="text/plain"/>
+                <div class="form-text text-white-50 mb-2">Input file with the following format: ADDRESS:PORT:USERNAME:PASSWORD</div>
+            </div>
+            <div class="row mb-2">
+                <label for="uploadGroup" class="form-label">Type a group name, or select from an existing group</label>
+                <select asp-items="@proxyTypeItems" id="uploadProxyType" class="form-control"></select>
+                <input type="text" id="uploadGroup" class="form-control" placeholder="Group name" value=""/>
+                <div class="form-text">Proxy type value will be disregarded if an existing group is found</div>
+            </div>
+            <button type="button" id="btn_uploadProxies" class="btn btn-outline-light text-bg-dark">Upload</button>
+        </div>
+    </div>
+</form>
+<hr class="mb-2"/>
+<div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-outline-danger text-bg-dark" onclick="ShowPurgeModal();"><i class="fa fa-circle-radiation"></i> Purge Proxies</button>
+    <a href=@Url.Action("Export", "Proxy") class="btn btn-outline-yellow text-bg-dark ms-2"><i class="fa fa-save"></i> Export to disk</a>
+</div>
+<hr class="mb-2"/>
+<div class="row">
+    @await Component.InvokeAsync(nameof(ProxiesDatatable), new ProxiesDatatableArgs() { ShowEditGroupButton = true, ShowDeleteButton = true })
+</div>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+<partial name="_ManageProxyGroupsModal"/>
+
+@section HeadScripts
+{
+    <!-- Required for ProxiesDatatable view componment -->
+    <script src="~/js/proxiesDatatable.js?1502"></script>
+}
+
+@section Scripts {
+    @*<script src="/assets/plugins/datatables.net/js/jquery.dataTables.js?1502"></script>
+    <script src="/assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.js?1502"></script>*@
+    <script src="/js/proxymanager.js?1502"></script>
+}

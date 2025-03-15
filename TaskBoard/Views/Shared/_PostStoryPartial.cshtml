@@ -1,0 +1,38 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@using TaskBoard.ViewComponents
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.PostStory);
+}
+<div class="card action-card text-bg-secondary">
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">Post Story</h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <div class="mb-2">
+        @if (isEnabled)
+        {
+            <form action="api/upload" method="post" enctype="multipart/form-data" id="postStory_uploadForm">
+                @await Component.InvokeAsync("MediaSelect", new MediaSelectInvokeArguments() { ControlIdPrefix = "postStory" })
+            </form>
+        }
+        </div>
+        <div class="mb-2">
+            <label for="postStory_swipeUpUrl" class="form-label">Swipe Up URL</label>
+            <input type="url" id="postStory_swipeUpUrl" name="swipeUpUrl" class="form-control"/>
+        </div>
+        @if (isEnabled)
+        {
+            @await Component.InvokeAsync("TargetUserList", new [] { "Mentioned Users", "postStory_mentioned" })
+        }
+    </div>
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-footer">
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light text-bg-dark" onclick="PostStory(this)">Run</button>
+        }
+    </div>
+</div>

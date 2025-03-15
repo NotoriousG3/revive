@@ -1,0 +1,23 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.ViewBusinessPublicStory);
+}
+<div class="card action-card text-bg-secondary">
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">View Business Public Story</h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <label for="viewBusinessPublicStory_username" class="form-label">Username</label>
+        <input type="text" id="viewBusinessPublicStory_username" required="true" class="form-control"/>
+    </div>
+    <div class="card-footer">
+        <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light text-bg-dark" onclick="ViewBusinessPublicStory(this)">Run</button>
+        }
+    </div>
+</div>

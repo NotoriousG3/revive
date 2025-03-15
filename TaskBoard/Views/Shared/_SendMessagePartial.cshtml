@@ -1,0 +1,80 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.SendMessage);
+    var canMacro = await ModuleEnabler.IsEnabled(SnapWebModuleId.MacroManager);
+}
+<div class="card action-card text-bg-secondary">
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-header text-bg-primary">
+        <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+        <h5 class="card-title">
+            Send Message
+            @if (!isEnabled)
+            {
+                <a id="purchaseSendMessage" class="btn btn-sm bg-dark text-success" href="@Url.Action("Purchase", "Home")" data-bs-toggle="tooltip" data-bs-title="Purchase Send Message Module">
+                    <i class="fa fa-dollar-sign"></i>
+                </a>
+            }
+        </h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <div class="form-control text-bg-dark mb-2">
+            <label for="sendMessageTargetAmount" class="form-label">Number of random targets</label>
+            <input type="number" id="sendMessageTargetAmount" min="1" max="200" value="1" class="form-control"/><br />
+            <input type="checkbox" id="sendMessage_RandomTargets" name="sendMessage_RandomTargets" value="true"/>
+            <label for="sendMessage_RandomTargets" class="form-label"><span style="color: #FFF; ">Send message to random targets in database</span></label>
+            <label for="countryFilters">Country:</label>
+            <select class="form-control text-bg-dark" name="countryFilter_Message" id="countryFilter_Message">
+                <option value="ANY">ANY</option>
+                <option value="ARABIC COUNTRIES">ARABIC COUNTRIES</option>
+                <option value="US">US</option>
+                <option value="CA">CA</option>
+                <option value="UK">UK</option>
+                <option value="NL">NL</option>
+                <option value="DE">DE</option>
+                <option value="ID">ID</option>
+                <option value="HK">HK</option>
+                <option value="MX">MX</option>
+                <option value="BR">BR</option>
+            </select>
+            <label for="genderFilters">Gender:</label>
+            <select class="form-control text-bg-dark" name="genderFilter_Message" id="genderFilter_Message">
+                <option value="ANY">ANY</option>
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+            </select>
+            <label for="raceFilters">Race:</label>
+            <select class="form-control text-bg-dark" name="raceFilter_Message" id="raceFilter_Message">
+                <option value="ANY">ANY</option>
+                <option value="WHITE">WHITE</option>
+                <option value="HISPANIC">HISPANIC</option>
+                <option value="BLACK">BLACK</option>
+                <option value="ASIAN">ASIAN</option>
+            </select><br /><br />
+        </div>
+        <div class="form-control text-bg-dark mb-2">
+            <input type="checkbox" id="sendMessage_FriendsOnly" name="sendMessage_FriendsOnly" value="randomize" /> 
+            <label for="sendMessage_FriendsOnly">Send message to friends only</label><br />
+            @if (canMacro)
+            {
+                <input type="checkbox" id="sendMessage_EnableMacros" name="sendMessage_EnableMacros" value="true"/>
+                <label for="sendMessage_EnableMacros">Enable macros  for messages</label><br />
+            }
+        </div>
+        @await Component.InvokeAsync("TargetUserList", new [] { "Target Users", "sendMessage_users" })
+        <div class="mb-2 pt-2" id="sendMessage_messages">
+            <h5 class="mb-2">Messages</h5>
+            <div id="messageContainer" class="mb-2"></div>
+            <button type="button" class="btn btn-sm btn-outline-green text-bg-success" id="btn_addMessage">Add Message</button>
+        </div>
+    </div>
+    <div class="card-footer">
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light @(!isEnabled ? "disabled" : "")" onclick="SendMessage(this)">Run</button>
+        }
+    </div>
+</div>

@@ -1,0 +1,42 @@
+﻿@using SnapWebModels
+@inject SnapWebManagerClient ManagerClient
+@inject AppSettingsLoader SettingsLoader
+@inject ModuleEnabler ModuleEnabler
+@{
+    ViewBag.Title = "Account Overview";
+    Layout = "_Layout";
+
+    var settings = await SettingsLoader.Load();
+    var modules = (await ManagerClient.GetModules()).Where(m => 
+        (m.Purchaseable || m.Enabled) && 
+        !string.IsNullOrWhiteSpace(m.Name) && 
+        (
+            m.Category == SnapWebModuleCategory.Action ||
+            m.Category == SnapWebModuleCategory.Functionality
+        )).OrderBy(m => m.Name);
+}
+
+<p>Your access is authorized until <strong>@settings.AccessDeadline</strong></p>
+<p>You can have up to <strong>@settings.MaxManagedAccounts</strong> managed accounts</p>
+<p>You can use up to <strong>@Utilities.BytesToString(settings.MaxQuotaMb * Utilities.BytesToMbConversionLiteral)</strong> of storage.</p>
+<p>You can have up to <strong>@settings.MaxTasks</strong> jobs at the same time, with up to <strong>@settings.Threads</strong> threads on each running job.</p>
+<hr />
+<h3>Module Status</h3>
+<table class="table text-bg-dark">
+    <thead>
+    <th>Name</th>
+    <th>Status</th>
+    </thead>
+    <tbody>
+        @foreach (var module in modules)
+        {
+            var isEnabled = await ModuleEnabler.IsEnabled(module.Id);
+            var textClass = isEnabled ? "text-success" : "text-danger";
+            var statusMsg = isEnabled ? "Enabled" : "Disabled";
+            <tr>
+                <td>@module.Name</td>
+                <td class="@textClass">@statusMsg</td>
+            </tr>
+        }
+    </tbody>
+</table>

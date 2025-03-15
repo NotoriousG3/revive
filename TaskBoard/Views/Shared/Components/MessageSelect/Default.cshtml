@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model TaskBoard.ViewComponents.MessageSelectViewModel
+
+
+
+<div class="mb-2">
+    <label for="@Model.ControlIdPrefix-isLink-@Model.Iteration">Message</label><br />
+    <input type="text" id="@Model.ControlIdPrefix-Message-@Model.Iteration" name="Message" class="form-control" value=""/>
+</div>
+@if (Model.ShowDelayField)
+{
+    <div class="mb-2">
+        <label for="@Model.ControlIdPrefix-messageDelay-@Model.Iteration" class="form-label">Seconds Before Sendings</label>
+        <input type="number" id="@Model.ControlIdPrefix-messageDelay-@Model.Iteration" name="messageDelay" class="form-control" min="0" step="0.1" value="0"/>
+    </div>
+}
+<div class="mb-2">
+    <input type="checkbox" id="@Model.ControlIdPrefix-isLink-@Model.Iteration" name="isLink" value="true"/>
+    <label for="@Model.ControlIdPrefix-isLink-@Model.Iteration">Send as Link</label><br />
+</div>

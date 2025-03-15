@@ -1,0 +1,13 @@
+﻿@model IEnumerable<WorkRequest>
+
+@{
+    var items = new List<SelectListItem>()
+    {
+        new("", "")
+    };
+    items.InsertRange(1, Model.Select(t => new SelectListItem($"{t.Id} - {t.Action.ToString()}", t.Id.ToString())).ToList());
+}
+
+<label for="connectedWorkId" class="form-label">Connected Work</label>
+<select id="connectedWorkId" asp-items="items" class="form-control text-bg-dark"></select>
+<div class="form-text">When choosing a connected work, the job will wait until the connected work is finished before starting and accounts and targets will be re-used. Choosing a different "Number of accounts to use" will indicate how many accounts from the previous work to use.</div>

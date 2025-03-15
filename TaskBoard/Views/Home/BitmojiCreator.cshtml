@@ -1,0 +1,341 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.BitmojiCreator);
+}
+@{
+    ViewData["Title"] = "Bitmoji Creator";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+@if (isEnabled)
+{
+<head>
+	<style> 
+		#avatar_preview_container {
+			position: sticky;
+			top: 170px;
+			left: 1550px;
+			padding: 10px;
+			margin: 10px;
+			width: 275px;
+			height: 75px;
+		}
+    </style>
+	<script type="text/javascript">
+            $(document).ready(function() {
+    			let url = `https://images.bitmoji.com/avatar-builder-v3/preview/body?scale=1.5&gender=2&style=5&rotation=0&body=7&bottom=1022&bottom_tone1=14734257&bottom_tone10=14734257&bottom_tone2=14734257&bottom_tone3=14734257&bottom_tone4=14734257&bottom_tone5=14734257&bottom_tone6=14734257&bottom_tone7=14734257&bottom_tone8=14734257&bottom_tone9=14734257&brow=1574&clothing_type=1&ear=1430&eye=1616&eyelash=-1&face_proportion=1&footwear=1019&footwear_tone1=7435899&footwear_tone10=12070200&footwear_tone2=12070200&footwear_tone3=7435899&footwear_tone4=12070200&footwear_tone5=16776955&footwear_tone6=12070200&footwear_tone7=12070200&footwear_tone8=7435899&footwear_tone9=12070200&hair=1311&hair_tone=2566954&is_tucked=0&jaw=1407&mouth=2340&nose=1491&pupil=2152&pupil_tone=8026746&skin_tone=16764057&sock=295&sock_tone1=6447210&sock_tone2=9737114&sock_tone3=6447210&sock_tone4=6447210&top=1032&top_tone1=8741970&top_tone10=8741970&top_tone2=8741970&top_tone3=8741970&top_tone4=8741970&top_tone5=8741970&top_tone6=8741970&top_tone7=8741970&top_tone8=8741970&top_tone9=8741970&version=0`;
+    			$('#avatar_preview').attr('src', url);
+    			
+                $('#scale, #gender, #style, #rotation, #body, #bottom, #bottom_tone1, #bottom_tone10, #bottom_tone2, #bottom_tone3, #bottom_tone4, #bottom_tone5, #bottom_tone6, #bottom_tone7, #bottom_tone8, #bottom_tone9, #brow, #clothing_type, #ear, #eye, #eyelash, #face_proportion, #footwear, #footwear_tone1, #footwear_tone10, #footwear_tone2, #footwear_tone3, #footwear_tone4, #footwear_tone5, #footwear_tone6, #footwear_tone7, #footwear_tone8, #footwear_tone9, #hair, #hair_tone, #is_tucked, #jaw, #mouth, #nose, #pupil, #pupil_tone, #skin_tone, #sock, #sock_tone1, #sock_tone2, #sock_tone3, #sock_tone4, #top, #top_tone1, #top_tone10, #top_tone2, #top_tone3, #top_tone4, #top_tone5, #top_tone6, #top_tone7, #top_tone8, #top_tone9, #version').on('change', function() {
+				let Scale = 1.5;
+				let Gender = $('#gender').val();
+				let Style = $('#style').val();
+				let Rotation = $('#rotation').val();
+				let Body = $('#body').val();
+				let Bottom = $('#bottom').val();
+				let BottomTone1 = $('#bottom_tone1').val();
+				let BottomTone2 = $('#bottom_tone2').val();
+				let BottomTone3 = $('#bottom_tone3').val();
+				let BottomTone4 = $('#bottom_tone4').val();
+				let BottomTone5 = $('#bottom_tone5').val();
+				let BottomTone6 = $('#bottom_tone6').val();
+				let BottomTone7 = $('#bottom_tone7').val();
+				let BottomTone8 = $('#bottom_tone8').val();
+				let BottomTone9 = $('#bottom_tone9').val();
+				let BottomTone10 = $('#bottom_tone10').val();
+				let Brow = $('#brow').val();
+				let ClothingType = $('#clothing_type').val();
+				let Ear = $('#ear').val();
+				let Eye = $('#eye').val();
+				let Eyelash = $('#eyelash').val();
+				let FaceProportion = $('#face_proportion').val();
+				let Footwear = $('#footwear').val();
+				let FootwearTone1 = $('#footwear_tone1').val();
+				let FootwearTone2 = $('#footwear_tone2').val();
+				let FootwearTone3 = $('#footwear_tone3').val();
+				let FootwearTone4 = $('#footwear_tone4').val();
+				let FootwearTone5 = $('#footwear_tone5').val();
+				let FootwearTone6 = $('#footwear_tone6').val();
+				let FootwearTone7 = $('#footwear_tone7').val();
+				let FootwearTone8 = $('#footwear_tone8').val();
+				let FootwearTone9 = $('#footwear_tone9').val();
+				let FootwearTone10 = $('#footwear_tone10').val();
+				let Hair = $('#hair').val();
+				let HairTone = $('#hair_tone').val();
+				let IsTucked = $('#is_tucked').val();
+				let Jaw = $('#jaw').val();
+				let Mouth = $('#mouth').val();
+				let Nose = $('#nose').val();
+				let Pupil = $('#pupil').val();
+				let PupilTone = $('#pupil_tone').val();
+				let SkinTone = $('#skin_tone').val();
+				let Sock = $('#sock').val();
+				let SockTone1 = $('#sock_tone1').val();
+				let SockTone2 = $('#sock_tone2').val();
+				let SockTone3 = $('#sock_tone3').val();
+				let SockTone4 = $('#sock_tone4').val();
+				let Top = $('#top').val();
+				let TopTone1 = $('#top_tone1').val();
+				let TopTone2 = $('#top_tone2').val();
+				let TopTone3 = $('#top_tone3').val();
+				let TopTone4 = $('#top_tone4').val();
+				let TopTone5 = $('#top_tone5').val();
+				let TopTone6 = $('#top_tone6').val();
+				let TopTone7 = $('#top_tone7').val();
+				let TopTone8 = $('#top_tone8').val();
+				let TopTone9 = $('#top_tone9').val();
+				let TopTone10 = $('#top_tone10').val();
+				let Version = $('#version').val();
+    				let url = `https://images.bitmoji.com/avatar-builder-v3/preview/body?scale=${Scale}&gender=${Gender}&style=5&rotation=${Rotation}&body=${Body}&bottom=${Bottom}&bottom_tone1=${BottomTone1}&bottom_tone10=${BottomTone10}&bottom_tone2=${BottomTone2}&bottom_tone3=${BottomTone3}&bottom_tone4=${BottomTone4}&bottom_tone5=${BottomTone5}&bottom_tone6=${BottomTone6}&bottom_tone7=${BottomTone7}&bottom_tone8=${BottomTone8}&bottom_tone9=${BottomTone9}&brow=1574&clothing_type=1&ear=${Ear}&eye=${Eye}&eyelash=${Eyelash}&face_proportion=${FaceProportion}&footwear=${Footwear}&footwear_tone1=${FootwearTone1}&footwear_tone10=${FootwearTone10}&footwear_tone2=${FootwearTone2}&footwear_tone3=${FootwearTone3}&footwear_tone4=${FootwearTone4}&footwear_tone5=${FootwearTone5}&footwear_tone6=${FootwearTone6}&footwear_tone7=${FootwearTone7}&footwear_tone8=${FootwearTone8}&footwear_tone9=${FootwearTone9}&hair=${Hair}&hair_tone=${HairTone}&is_tucked=${IsTucked}&jaw=${Jaw}&mouth=${Mouth}&nose=${Nose}&pupil=${Pupil}&pupil_tone=${PupilTone}&skin_tone=${SkinTone}&sock=${Sock}&sock_tone1=${SockTone1}&sock_tone2=${SockTone2}&sock_tone3=${SockTone3}&sock_tone4=${SockTone4}&top=${Top}&top_tone1=${TopTone1}&top_tone10=${TopTone10}&top_tone2=${TopTone2}&top_tone3=${TopTone3}&top_tone4=${TopTone4}&top_tone5=${TopTone5}&top_tone6=${TopTone6}&top_tone7=${TopTone7}&top_tone8=${TopTone8}&top_tone9=${TopTone9}&version=0`;
+    				$('#avatar_preview').attr('src', url);
+                });
+            });
+        </script>
+</head>
+
+<div id="avatar_preview_container">
+	<label for="avatar_preview">Bitmoji Preview</label>
+	<img src="" id="avatar_preview" class="img-thumbnail"><br /><br/><br/>
+	
+    <center><button type="button" id="btn_createBitmoji" class="btn btn-outline-light text-bg-dark">Create Bitmoji</button></center>
+</div>
+<div class="container">
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bitmoji_name">Bitmoji Name</label>
+	<input type="text" class="form-control" id="bitmoji_name" name="bitmoji_name" value="Bitmoji Name">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2 col-xxl-3 col-sm-6 mb-2">
+	<label for="gender">Gender</label>
+	<select class="form-control" id="gender" name="gender">
+		<option value="1">Male</option>
+		<option value="2" selected>Female</option>
+	</select>
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="hair">Hair</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="hair" name="hair" value="1311">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="hair_tone">Hair Tone</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="hair_tone" name="hair_tone" value="2566954">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="skin_tone">Skin Tone</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="skin_tone" name="skin_tone" value="16764057">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top">Top</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top" name="top" value="1032">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="is_tucked">Is Tucked</label>
+	<select class="form-control" id="is_tucked" name="is_tucked">
+		<option value="0" selected>No</option>
+		<option value="1">Yes</option>
+	</select>
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="body">Body</label>
+	<input type="number" min="1" step="1" max="12" class="form-control" id="body" name="body" value="7">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom">Bottom</label>
+	<input type="number" min="1" step="1" max="5000" class="form-control" id="bottom" name="bottom" value="1022">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="rotation">Rotation</label>
+	<input type="number" min="0" max="1" class="form-control" id="rotation" name="rotation" value="0">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="brow">Brow</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="brow" name="brow" value="1574">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="ear">Ear</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="ear" name="ear" value="1430">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="eye">Eye</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="eye" name="eye" value="1616">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="pupil">Pupil</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="pupil" name="pupil" value="2152">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="pupil_tone">Pupil Tone</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="pupil_tone" name="pupil_tone" value="8026746">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="eyelash">Eyelash</label>
+	<input type="number" min="-1" max="16777215" class="form-control" id="eyelash" name="eyelash" value="-1">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="face_proportion">Face Proportion</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="face_proportion" name="face_proportion" value="1">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="jaw">Jaw</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="jaw" name="jaw" value="1407">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="mouth">Mouth</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="mouth" name="mouth" value="2340">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="nose">Nose</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="nose" name="nose" value="1451">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone1">Top Tone 1</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone1" name="top_tone1" value="8741970">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone2">Top Tone 2</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone2" name="top_tone2" value="8741970">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone3">Top Tone 3</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone3" name="top_tone3" value="8741970">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone4">Top Tone 4</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone4" name="top_tone4" value="7435899">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone5">Top Tone 5</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone5" name="top_tone5" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone6">Top Tone 6</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone6" name="top_tone6" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone7">Top Tone 7</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone7" name="top_tone7" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone8">Top Tone 8</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone8" name="top_tone8" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone9">Top Tone 9</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone9" name="top_tone9" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="top_tone10">Top Tone 10</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="top_tone10" name="top_tone10" value="8741970">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone1">Bottom Tone 1</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone1" name="bottom_tone1" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone2">Bottom Tone 2</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone2" name="bottom_tone2" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone3">Bottom Tone 3</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone3" name="bottom_tone3" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone4">Bottom Tone 4</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone4" name="bottom_tone4" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone5">Bottom Tone 5</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone5" name="bottom_tone5" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone6">Bottom Tone 6</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone6" name="bottom_tone6" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone7">Bottom Tone 7</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone7" name="bottom_tone7" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone8">Bottom Tone 8</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone8" name="bottom_tone8" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone9">Bottom Tone 9</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone9" name="bottom_tone9" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="bottom_tone10">Bottom Tone 10</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="bottom_tone10" name="bottom_tone10" value="14734257">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="sock">Sock</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="sock" name="sock" value="295">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="sock_tone1">Sock Tone 1</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="sock_tone1" name="sock_tone1" value="6447210">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="sock_tone2">Sock Tone 2</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="sock_tone2" name="sock_tone2" value="6447210">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="sock_tone3">Sock Tone 3</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="sock_tone3" name="sock_tone3" value="6447210">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="sock_tone4">Sock Tone 4</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="sock_tone4" name="sock_tone4" value="6447210">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear">Footwear</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear" name="footwear" value="1019">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone1">Footwear Tone 1</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone1" name="footwear_tone1" value="7435899">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone2">Footwear Tone 2</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone2" name="footwear_tone2" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone3">Footwear Tone 3</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone3" name="footwear_tone3" value="7435899">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone4">Footwear Tone 4</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone4" name="footwear_tone4" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone5">Footwear Tone 5</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone5" name="footwear_tone5" value="16776955">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone6">Footwear Tone 6</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone6" name="footwear_tone6" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone7">Footwear Tone 7</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone7" name="footwear_tone7" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone8">Footwear Tone 8</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone8" name="footwear_tone8" value="7435899">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone9">Footwear Tone 9</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone9" name="footwear_tone9" value="12070200">
+</div>
+<div class="form-group col-xxl-3 col-sm-6 mb-2">
+	<label for="footwear_tone10">Footwear Tone 10</label>
+	<input type="number" min="1" step="1" max="16777215" class="form-control" id="footwear_tone10" name="footwear_tone10" value="12070200">
+</div>
+</div>
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section Scripts {
+	<script src="/js/bitmojicreator.js?1504"></script>
+}
+}

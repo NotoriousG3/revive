@@ -1,0 +1,23 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.ReportUserPublicProfileRandom);
+}
+<div class="card action-card text-bg-secondary">
+    <div class="card-header text-bg-primary">
+        <h5 class="card-title">Report User Public Profile Random</h5>
+    </div>
+    <div class="card-body text-bg-dark">
+        <label for="reportuserpublicprofilerandom_username" class="form-label">Username</label>
+        <input type="text" id="reportuserpublicprofilerandom_username" required="true" class="form-control"/>
+    </div>
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-footer">
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light text-bg-dark" onclick="ReportUserPublicProfileRandom(this)">Run</button>
+        }
+    </div>
+</div>

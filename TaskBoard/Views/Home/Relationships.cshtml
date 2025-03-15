@@ -1,0 +1,73 @@
+﻿@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.AddFriend);
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Relationships";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+@if (isEnabled)
+{
+    <div class="row mb-3">
+        <partial name="_CommonActionControlsPartial"/>
+    </div>
+    <hr/>
+    <div class="row mb-2">
+        @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.AddFriend))
+        {
+            <div class="col-sm-6 col-xxl-4 mb-2">
+                <partial name="_AddFriendPartial"/>
+            </div>
+        }
+        @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.AcceptFriend))
+        {
+            <div class="col-sm-6 col-xxl-4 mb-2">
+                <partial name="_AcceptFriendPartial"/>
+            </div>
+        }
+        @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.QuickAdd))
+        {
+            <div class="col-sm-6 col-xxl-4 mb-2">
+                <partial name="_QuickAddPartial"/>
+            </div>
+        }
+        @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.RefreshFriends))
+        {
+            <div class="col-sm-6 col-xxl-4 mb-2">
+                <partial name="_RefreshFriendPartial"/>
+            </div>
+        }
+        @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.RelogAccounts))
+        {
+            <div class="col-sm-6 col-xxl-4 mb-2">
+                <partial name="_RelogAccountsPartial"/>
+            </div>
+        }
+        @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.FriendCleaner))
+        {
+            <div class="col-sm-6 col-xxl-4 mb-2">
+                <partial name="_CleanFriendPartial"/>
+            </div>
+        }
+        @if (await ModuleEnabler.IsEnabled(SnapWebModuleId.ExportFriends))
+        {
+            <div class="col-sm-6 col-xxl-4 mb-2">
+                <partial name="_ExportFriendPartial"/>
+            </div>
+        }
+    </div>
+
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken"/>
+
+@section Stylesheets
+{
+    <link rel="stylesheet" href="~/datetimepicker/jquery.datetimepicker.min.css"/>
+}
+
+@section Scripts {
+    <script src="~/datetimepicker/jquery.datetimepicker.full.js?1504"></script>
+    <script src="/js/classes/accountmanager.js?1504"></script>
+    <script src="/js/messageposter.js?1504"></script>
+}}

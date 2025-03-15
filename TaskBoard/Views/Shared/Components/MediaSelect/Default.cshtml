@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model TaskBoard.ViewComponents.MediaSelectViewModel
+@{
+    // We don't want to allow selection of text files
+    var items = (from file in Model.Files where !file.ServerPath.EndsWith(".txt") select new SelectListItem(file.Name, file.Id.ToString())).ToList();
+}
+
+<label for="@Model.ControlIdPrefix-inputFile" class="form-label">Media</label>
+@if (items.Count == 0 && Model.ShowNoMediaLink)
+{
+    <div class="text-warning mb-2">Upload media <a href="@Url.Action("Index", "MediaManager")">here!</a></div>
+}
+<select id="@Model.ControlIdPrefix-inputFile-@Model.Iteration" name="inputFile" asp-items="items" class="form-control text-bg-dark">
+</select>
+@if (items.Count == 0)
+{
+    <div class="form-text"></div>
+}
+@if (Model.ShowSwipeUpUrlField)
+{
+    <div class="mb-2">
+        <label for="@Model.ControlIdPrefix-swipeUpUrl-@Model.Iteration" class="form-label">Swipe Up URL</label>
+        <input type="url" id="@Model.ControlIdPrefix-swipeUpUrl-@Model.Iteration" name="swipeUpUrl" class="form-control"/>
+        You can seperate multiple links with a , if multiple links are provided either a random will be picked or a new one will be provided every x amount of snaps as defined above.
+    </div>
+}
+
+@if (Model.ShowDelayField)
+{
+    <div class="mb-2">
+        <label for="@Model.ControlIdPrefix-snapDelay-@Model.Iteration" class="form-label">Seconds Before Sending</label>
+        <input type="number" id="@Model.ControlIdPrefix-snapDelay-@Model.Iteration" name="snapDelay" class="form-control" min="0" step="0.1" value="0"/>
+    </div>
+}

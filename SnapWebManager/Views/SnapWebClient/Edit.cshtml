@@ -1,0 +1,74 @@
+@using SnapWebModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model SnapWebModels.SnapWebClientModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var iosSelectItem = new SelectListItem(SnapWebModuleId.Ios.ToString(), ((int)SnapWebModuleId.Ios).ToString());
+    var androidSelectItem = new SelectListItem(SnapWebModuleId.AndroidOs.ToString(), ((int)SnapWebModuleId.AndroidOs).ToString());
+    var osChoices = new[] { androidSelectItem, iosSelectItem };
+}
+
+<h1>Edit</h1>
+
+<h4>SnapWebClientModel</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ClientId"/>
+            <div class="form-group">
+                <label asp-for="DefaultOS" class="control-label"></label>
+                <select asp-for="DefaultOS" class="form-control" asp-items="osChoices"></select>
+                <span asp-validation-for="DefaultOS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiKey" class="control-label"></label>
+                <input asp-for="ApiKey" class="form-control"/>
+                <label asp-for="ApiKey" class="form-text">If this is set, it will override the default API Key provided by the server</label>
+                <span asp-validation-for="ApiKey" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxManagedAccounts" class="control-label"></label>
+                <input asp-for="MaxManagedAccounts" class="form-control"/>
+                <span asp-validation-for="MaxManagedAccounts" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Threads" class="control-label"></label>
+                <input asp-for="Threads" class="form-control"/>
+                <span asp-validation-for="Threads" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxTasks" class="control-label"></label>
+                <input asp-for="MaxTasks" class="form-control"/>
+                <span asp-validation-for="MaxTasks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxAddFriendsUsers" class="control-label"></label>
+                <input asp-for="MaxAddFriendsUsers" class="form-control"/>
+                <span asp-validation-for="MaxAddFriendsUsers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxQuotaMb" class="control-label"></label>
+                <input asp-for="MaxQuotaMb" class="form-control"/>
+                <span asp-validation-for="MaxQuotaMb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccessDeadline" class="control-label"></label>
+                <input asp-for="AccessDeadline" class="form-control"/>
+                <span asp-validation-for="AccessDeadline" class="text-danger"></span>
+            </div>
+            <partial name="_ModulesCheckPartial"/>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

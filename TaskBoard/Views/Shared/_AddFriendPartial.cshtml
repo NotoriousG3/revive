@@ -1,0 +1,72 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@using SnapWebModels
+@inject ModuleEnabler ModuleEnabler
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var isEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.AddFriend);
+}
+<div class="card action-card text-bg-secondary">
+        @if (!isEnabled)
+            {
+                <a id="purchaseAddFriend" class="btn btn-sm bg-dark text-success" href="@Url.Action("Purchase", "Home")" data-bs-toggle="tooltip" data-bs-title="Purchase AddFriend Module">
+                    <i class="fa fa-dollar-sign"></i>
+                </a>
+            }
+        <div class="card-header text-bg-primary">
+            <h5 class="card-title">Add Friend</h5>
+        </div>
+        <div class="card-body text-bg-dark">
+            <div class="form-control text-bg-dark mb-2">
+                <label for="addFriends_friendsPerAccount" class="form-label">Amount of random targets to add</label>
+                <input type="number" id="addFriends_friendsPerAccount" min="1" max="2000" value="1" class="form-control"/>
+                <label for="addFriends_minFriends" class="form-label">Min. Friends Account Must Have</label>
+                <input type="number" id="addFriends_minFriends" min="0" max="2000" value="0" class="form-control"/>
+                <label for="addFriends_maxFriends" class="form-label">Max. Friends Account Must Have</label>
+                <input type="number" id="addFriends_maxFriends" min="1" max="2000" value="2000" class="form-control"/>
+                <label for="addFriends_Delay" class="form-label">Delay between adds</label>
+                <input type="number" id="addFriends_Delay" min="5" max="300" value="30" class="form-control"/><br/>
+                <label for="addFriend_RandomTargets"></label>
+                <input type="checkbox" id="addFriend_RandomTargets" name="addFriend_RandomTargets" value="randomize"/>
+                Add random targets from database<br/><br />
+                <label for="countryFilters">Country:</label>
+                <select class="form-control text-bg-dark" name="countryFilter" id="countryFilter">
+                    <option value="ANY">ANY</option>
+                    <option value="ARABIC COUNTRIES">ARABIC COUNTRIES</option>
+                    <option value="US">US</option>
+                    <option value="CA">CA</option>
+                    <option value="UK">UK</option>
+                    <option value="NL">NL</option>
+                    <option value="DE">DE</option>
+                    <option value="ID">ID</option>
+                    <option value="HK">HK</option>
+                    <option value="MX">MX</option>
+                    <option value="BR">BR</option>
+                </select>
+                <label for="genderFilters">Gender:</label>
+                <select class="form-control text-bg-dark" name="genderFilter" id="genderFilter">
+                    <option value="ANY">ANY</option>
+                    <option value="MALE">MALE</option>
+                    <option value="FEMALE">FEMALE</option>
+                </select>
+                <label for="raceFilters">Race:</label>
+                <select class="form-control text-bg-dark" name="raceFilter" id="raceFilter">
+                    <option value="ANY">ANY</option>
+                    <option value="WHITE">WHITE</option>
+                    <option value="HISPANIC">HISPANIC</option>
+                    <option value="BLACK">BLACK</option>
+                    <option value="ASIAN">ASIAN</option>
+                </select><br /><br />
+                @if (isEnabled)
+                {
+                    @await Component.InvokeAsync("TargetUserList", new[] { "Target Users", "addFriend_users" })
+                }
+            </div>
+        </div>
+    <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+    <div class="card-footer">
+        @if (isEnabled)
+        {
+            <button type="button" class="btn btn-outline-light text-bg-dark" onclick="AddFriend(this)">Run</button>
+        }
+    </div>
+</div>

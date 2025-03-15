@@ -1,0 +1,80 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Html
+@inject SignInManager<IdentityUser> SignInManager
+@inject AppSettingsLoader SettingsLoader
+@inject SnapchatAccountManager AccountManager
+@{
+    var settings = await SettingsLoader.Load();
+    var timeSpan = (settings.AccessDeadline - DateTime.UtcNow).Value;
+    var notifications = new List<string>();
+    
+    if (timeSpan.TotalDays < 2)
+    {
+        var dueMessage = timeSpan.TotalDays < 0 ? "Your SnapWeb access has <strong>expired</strong>" : $"Your SnapWeb access will expire in <strong>{TimeUtilities.ReadableTimeLeft(timeSpan)}</strong>!";
+        notifications.Add(dueMessage);
+    }
+    
+    var currentAccounts = AccountManager.Count();
+    if (settings.MaxManagedAccounts - currentAccounts <= 5)
+    {
+        notifications.Add($"You have used <strong>{currentAccounts}</strong> out of <strong>{settings.MaxManagedAccounts}</strong> accounts");
+    }
+    
+    var hasNotifications = notifications.Any();
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @* Notifications Widget*@
+    <div class="dropdown topbar-head-dropdown ms-1" id="notificationDropdown">
+        <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+            <i class="bx bx-bell fs-23"></i>
+            @if (hasNotifications)
+            {
+                <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">@notifications.Count</span>
+            }
+        </button>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+            <h6 class="dropdown-header fs-10px mb-1">NOTIFICATIONS</h6>
+            <div class="dropdown-divider mt-1"></div>
+            @if (hasNotifications)
+            {
+                @foreach (var notification in notifications)
+                {
+                    <div class="flex-1 flex-wrap ps-3">
+                        <div class="mb-1 text-white">@(new HtmlString(notification))</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="flex-1 flex-wrap ps-3">
+                    <div class="mb-1 text-white"><strong>No notifications.</strong></div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="dropdown ms-sm-1 header-item topbar-user">
+        <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="d-flex align-items-center">
+                <span class="text-start ms-xl-2">
+                    <span class="d-none d-xl-grid ms-1 fw-semibold user-name-text">@User.Identity?.Name</span>
+                    <span class="d-none d-xl-grid ms-1 fs-12 text-muted user-name-sub-text">User</span>
+                </span>
+            </span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end">
+            <h6 class="dropdown-header">Welcome @User.Identity?.Name!</h6>
+            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Settings"><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
+            
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="menu"></div>
+}

@@ -1,0 +1,184 @@
+﻿@using SnapchatLib
+@using SnapWebModels
+@using TaskBoard.Models.SnapchatActionModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using TaskBoard.ViewComponents
+@inject ModuleEnabler ModuleEnabler
+@inject AppSettingsLoader SettingsLoader
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Create Accounts";
+    var settings = await SettingsLoader.Load();
+    var iosEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.Ios) || settings.DefaultOs == SnapWebModuleId.Ios;
+    var androidEnabled = await ModuleEnabler.IsEnabled(SnapWebModuleId.AndroidOs) || settings.DefaultOs == SnapWebModuleId.AndroidOs;
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+
+<p>Create new accounts here. You currently have a maximum of <strong>@settings.MaxManagedAccounts</strong> available account slots to use, at which point you will not be able to create further accounts.</p>
+<hr class="mb-2"/>
+<form>
+    <div>
+        <div class="row mb-2">
+            <label for="accountsToCreate" class="form-label col-sm-2 col-form-label">Accounts to create</label>
+            <div class="col">
+                <input type="number" id="accountsToCreate" value="1" min="1" step="1" class="form-control mb-2"/>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="proxyGroupToUse" class="form-label col-sm-2 col-form-label">Proxy group to use</label>
+            <div class="col">
+                @await Component.InvokeAsync(nameof(ProxyGroupSelect), new ProxyGroupSelectViewArguments() { ControlId = "proxyGroupToUse", ShowLabel = false })
+                <div class="form-text">When selecting a proxy group, accounts picked for the job will be created with, or switched, with the proxies inside the group</div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="boostMessages" class="form-label col-sm-2 col-form-label">Boost score messages</label>
+            <div class="col">
+                <input type="number" id="boostMessages" value="0" min="0" step="1" class="form-control mb-2"/>
+            </div>
+        </div>
+        <hr />
+        <h4>Snapchat Settings</h4>
+        <div class="row mb-2">
+            <label for="usernameRandom" class="form-label col-form-label col-sm-2">Username Service</label>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="usernameCreationService" id="usernameRandom" value="0" checked/>
+                    <label class="form-check-label" for="usernameRandom">Random Usernames</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="usernameCreationService" id="usernameManager" value="1"/>
+                    <label class="form-check-label" for="usernameManager">Username Manager</label>
+                    <div class="form-text"><a asp-controller="Home" asp-action="UserNameManager">Click here to manage your Usernames</a></div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <h4>Account Details</h4>
+        <div class="row mb-2">
+            <div class="col">
+                Specify the configuration you wish to use for account generation.
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="row mb-1">
+                <div class="col">
+                    <label for="firstname" class="form-label col-sm-2 col-form-label">First Name</label>
+                    <div class="col">
+                        <input type="text" class="form-control" id="firstname"/>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="lastname" class="form-label col-sm-2 col-form-label">Last Name</label>
+                    <div class="col">
+                        <input type="text" class="form-control" id="lastname"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-text">Choosing a <strong>First Name</strong> or <strong>Last Name</strong> will override the <strong>Username Service</strong> selection below</div>
+        </div>
+        <div class="row mb-2">
+            <label class="form-label col-form-label col-sm-2">Account Name Service</label>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="nameCreationService" id="nameRandom" value="0" checked/>
+                    <label class="form-check-label" for="nameServiceRandom">Random</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="nameCreationService" id="nameManager" value="1"/>
+                    <label class="form-check-label" for="nameServiceManager">Name Manager</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="customPassword" class="form-label col-sm-2 col-form-label">Custom Password</label>
+            <div class="col">
+                <input type="text" id="customPassword" class="form-control mb-2"/>
+                <div class="form-text">This will set all account passwords in this job to this password</div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="gender" class="form-label col-sm-2 col-form-label">Gender</label>
+            <div class="col">
+                <select id="gender" class="form-control text-bg-dark" asp-items="@Html.GetEnumSelectList<Gender>()"></select>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label for="CustomBitmoji" class="form-label col-sm-2 col-form-label">Custom Bitmoji</label>
+            <div class="col">
+                @await Component.InvokeAsync(nameof(BitmojiSelect), new BitmojiSelectViewArguments() { ControlId = "CustomBitmoji", ShowLabel = false })
+            </div>
+            @*<!--<label for="bitmoji" class="form-label col-sm-2 col-form-label">Bitmoji</label>
+            <div class="col">
+                <select id="bitmoji" class="form-control text-bg-dark" asp-items="@Html.GetEnumSelectList<BitmojiSelection>()"></select>
+            </div>-->*@
+        </div>
+    </div>
+    <hr />
+    <h4>Validation Settings</h4>
+    <div class="row mb-2">
+        <label class="form-label col-sm-2 col-form-label">Email Verification Service</label>
+        <div class="col">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="emailVerificationService" id="emailHotmail" value="1"/>
+                <label class="form-check-label" for="hotmail">E-Mail Manager</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="emailVerificationService" id="emailKopeechka" value="2" checked/>
+                <label class="form-check-label" for="kopeechka">Kopeechka</label>
+            </div>
+            <div class="form-text">E-Mail Manager Supports (Hotmail, Outlook, Gmx, Yandex)</div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label for="phoneCountry" class="form-label col-sm-2 col-form-label">Phone Verification Service</label>
+        <div class="col">
+            <div class="mb-2">
+                <input type="text" id="phoneCountry" class="form-control text-bg-dark"/>
+                <input type="hidden" id="country_code"/>
+            </div>
+            <div class="mb-2">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="phoneVerificationService" id="phone5Sim" value="1"/>
+                    <label class="form-check-label" for="phone5Sim">FiveSIM</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="phoneVerificationService" id="textverified" value="3"/>
+                    <label class="form-check-label" for="textverified">TextVerified (US Numbers Only)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="phoneVerificationService" id="smsactivate" value="4"/>
+                    <label class="form-check-label" for="smsactivate">SMS-Activate</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="phoneVerificationService" id="smspool" value="5" checked/>
+                    <label class="form-check-label" for="smspool">SMS Pool</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <button type="button" id="btn_createAccount" class="btn btn-outline-light text-bg-dark ml-2">Create</button>
+    </div>
+</form>
+<hr class="mb-2" />
+<partial name="_AccountsTableWithFilters"/>
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+@section HeadScripts
+{
+    <!-- Required for SnapchatAccountDatatable view componment -->
+    <script src="~/js/classes/validationstatus.js?1504"></script>
+    <script src="~/js/accountDatatable.js?1504"></script>
+}
+
+@section Scripts {
+    <script src="/countryselect/js/countrySelect.js?1504"></script>
+    <script src="/js/classes/accountmanager.js?1504"></script>
+    <script src="/js/accounttools.js?1504"></script>
+}
+
+@section Stylesheets
+{
+    <link rel="stylesheet" href="/countryselect/css/countrySelect.css">
+}

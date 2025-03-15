@@ -1,0 +1,27 @@
+﻿@using TaskBoard.ViewComponents
+<div class="col-xxl-3 col-sm-6 mb-2">
+    <label for="accountsToUse" class="form-label">Number of accounts to use</label>
+    <input type="number" id="accountsToUse" min="1" value="1" class="form-control"/>
+</div>
+<div class="col-xxl-3 col-sm-6 mb-2">
+    <label for="accountGroupToUse" class="form-label">Account group</label>
+    @await Component.InvokeAsync(nameof(AccountGroupSelect), new AccountGroupSelectViewArguments() { ControlId = "accountGroupToUse", ShowLabel = false })
+    <div class="form-text">When selecting an account group, the `Number of accounts to use` field will be disregarded and <strong>ALL</strong> accounts in the group will be used</div>
+</div>
+<div class="col-xxl-3 col-sm-6 mb-2">
+    <label for="proxyGroupToUse" class="form-label">Proxy group</label>
+    @await Component.InvokeAsync(nameof(ProxyGroupSelect), new ProxyGroupSelectViewArguments() { ControlId = "proxyGroupToUse", ShowLabel = false })
+    <div class="form-text">When selecting a proxy group, accounts picked for the job will be created with, or switched, with the proxies inside the group</div>
+</div>
+<div class="col-xxl-3 col-sm-6 mb-2">
+    <label for="taskStartTime" class="form-label">Start Date/Time</label>
+    <input type="datetime" id="taskStartTime" class="form-control" value=""/>
+</div>
+<div class="col-xxl-3 col-sm-6 mb-2" id="workSelectContainer">
+@await Component.InvokeAsync(nameof(WorkSelect))
+</div>
+<div class="col-xxl-3 col-sm-6 mb-2">
+    <label for="chainDelayms" class="form-label">Start Delay (ms)</label>
+    <input type="number" id="chainDelayms" min="0" step="1" class="form-control" />
+    <div class="form-text">Amount of time (in milliseconds) to wait for the job to start after its connected work has finished.</div>
+</div>

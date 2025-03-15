@@ -1,0 +1,46 @@
+﻿@inject Utilities Utilities
+@inject AppSettingsLoader SettingsLoader
+@{
+    var cpuUsage = await Utilities.GetCpuUsageForProcess();
+    var ramUsage = Utilities.GetRamUsage();
+
+    var settings = await SettingsLoader.Load();
+}
+<div class="row mb-2">
+    <span id="cpu-usage">CPU Usage: @cpuUsage%</span><br /><span id="ram-usage">Ram Usage: @ramUsage MB</span>
+    <h2>Work Status</h2>
+    <div class="d-flex">
+        <span class="me-2">
+            <i class="fa fa-running me-1"></i><span id="workRunning"></span>
+        </span>
+        <span class="me-2">
+            <i class="fa fa-circle-check me-1 text-success"></i><span id="workOk"></span>
+        </span>
+        <span class="me-2">
+            <i class="fa fa-circle-check text-warning me-1"></i><span id="workIncomplete"></span>
+        </span>
+        <span class="me-2">
+            <i class="fa fa-circle-xmark text-danger me-1"></i><span id="workFailed"></span>
+        </span>
+        <div class="ms-auto">
+            Maximum Concurrent Threads: <strong>@settings.Threads</strong>
+        </div>
+        <div class="ms-auto">
+            Maximum Concurrent Tasks: <strong>@settings.MaxTasks</strong>
+        </div>
+    </div>
+    <hr/>
+    <table id="workTable" class="table table-sm table-borderless table-hover">
+        <thead class="border-bottom">
+        <th>Id</th>
+        <th>Date Requested</th>
+        <th>Dated Finished</th>
+        <th>Action</th>
+        <th>Status</th>
+        <th>Progress</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>

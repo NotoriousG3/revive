@@ -1,0 +1,21 @@
+﻿@using TaskBoard.ViewComponents
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model TaskBoard.Models.AccountGroupChanges
+<div class="row">
+    <h5>Group Members</h5>
+    <p>These are the current group members. Click on one of them to remove them from the group. Changes will not be saved until you confirm your changes in the bottom of the page</p>
+    <div id="accountsContainer" class="flex-row align-content-start mb-2"></div>
+    <input type="hidden" asp-for="SelectedAccounts"/>
+</div>
+<hr class="mb-2"/>
+<div>
+    <h5>Choose accounts to include in group</h5><br />
+    <button type="button" class="btn btn-outline-success" id="btn_modalConfirm_selectAll"><i class="fa fa-person"></i>Select All Accounts</button> <button type="button" class="btn btn-outline-danger" id="btn_modalConfirm_deselectAll"><i class="fa fa-person"></i>Deselect All Accounts</button><br /><br /> 
+    
+    @await Component.InvokeAsync(nameof(SnapchatAccountsDatatable), new SnapchatAccountDatatableArgs()
+    {
+        ShowDeleteButton = false,
+        ShowRelogButton = false,
+        ShowAddToGroupButton = true
+    })
+</div>
