@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -28,7 +28,7 @@
         <PackageReference Include="Google.Protobuf" Version="3.22.3" />
         <PackageReference Include="Grpc.Net.Client" Version="2.52.0" />
         <PackageReference Include="MailKit" Version="3.6.0" />
-        <PackageReference Include="Selenium.Support" Version="4.8.2" />
+        <PackageReference Include="Selenium.Support" Version="4.30.0" />
         <PackageReference Include="Selenium.UndetectedChromeDriver" Version="1.1.1" />
         <InternalsVisibleTo Include="SnapchatLib.Tests" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
